@@ -1,4 +1,4 @@
 @extends("layouts.app")
 @section('content')
-    <map-content></map-content>
+<map-component></map-component>
 @endsection

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("title");
             $table->string("uri");
             $table->boolean("required_auth")->default(false);
+            $table->bigInteger("user_id")->nullable();
             $table->timestamps();
         });
     }

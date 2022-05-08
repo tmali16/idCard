@@ -1,0 +1,8 @@
+/*@import "~vuetify/dist/vuetify.min.css";*/
+
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/*@import "bootstrap";*/
+
