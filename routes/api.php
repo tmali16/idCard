@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+Route::prefix('geo')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
+    Route::post('/search', 'getByMncLacCid');
 });

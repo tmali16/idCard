@@ -1,6 +1,6 @@
 const mix = require('laravel-mix');
 require('laravel-vue-lang/mix');
-const path = require('path');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -12,7 +12,7 @@ const path = require('path');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js').lang()
     .vue()
     .sass("resources/sass/style.scss", "public/css")
     .postCss('resources/css/app.css', 'public/css', [
@@ -22,19 +22,24 @@ mix.js('resources/js/app.js', 'public/js')
     ]);
 
 mix
-    .webpackConfig({
-        resolve: {
-            alias: {
-                '@lang': path.resolve('./lang'),
-            },
-        },
-        module: {
-            rules: [
-                {
-                    test: /[\\\/]lang.+\.(php)$/,
-                    loader: 'php-array-loader',
-                },
-            ],
-        },
-    })
-    .disableSuccessNotifications();
+    // .webpackConfig({
+    //     plugins:[
+    //     ],
+    //     resolve: {
+    //         alias: {
+    //             '@lang': path.resolve('./lang'),
+    //         },
+    //     },
+    //     module: {
+    //         rules: [
+    //             {
+    //                 test: /[\\\/]lang.+\.(php)$/,
+    //                 loader: 'php-array-loader',
+    //             },
+    //         ],
+    //     },
+    //     stats: {
+    //         children: false
+    //     }
+    // })
+    .disableNotifications();

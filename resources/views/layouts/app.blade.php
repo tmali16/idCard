@@ -14,7 +14,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-blue-400 overflow-hidden">
+        <div class="min-h-screen bg-blue-400">
 {{--            @include('layouts.navigation')--}}
 {{--            <header class="bg-white shadow-sm">--}}
 {{--                <div class="container mx-auto pt-2 px-4 sm:px-6 lg:px-8">--}}
@@ -36,7 +36,7 @@
 {{--                </div>--}}
 {{--            </header>--}}
             <!-- Page Content -->
-            <main class="h-100" id="app">
+            <main class="h-screen" id="app">
                 @yield("content")
             </main>
         </div>

@@ -1,8 +1,10 @@
+// import Vue from "vue";
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
 import Vuetify from "./Plugins/Vuetify";
-import { Lang } from 'laravel-vue-lang';
+import { Lang } from 'laravel-vue-lang/dist';
 window.L = require('leaflet/dist/leaflet');
 
 Vue.use(Lang, {
@@ -18,12 +20,8 @@ Vue.use(Lang, {
 // Vue.component('view-component', require('./components/ViewComponent.vue').default);
 Vue.component('map-component', require('./components/MapComponent.vue').default);
 
-
+// console.log($lang("form.lac"))
 const app = new Vue({
     vuetify: Vuetify,
     el: '#app',
-    data:{
-    },
-    methods:{
-    }
 });
