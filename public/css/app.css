@@ -849,6 +849,14 @@ select {
   width: 20%;
 }
 
+.w-40 {
+  width: 10rem;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
 .max-w-xl {
   max-width: 36rem;
 }
@@ -1319,6 +1327,10 @@ select {
 
   .sm\:h-80 {
     height: 20rem;
+  }
+
+  .sm\:h-96 {
+    height: 24rem;
   }
 
   .sm\:flex-1 {

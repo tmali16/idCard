@@ -6,25 +6,25 @@
                 Поиск
             </div>
             <v-card-text class="py-1">
-                <v-radio-group class="m-0" v-model="reqData.mnc">
-                    <v-radio v-for="(v, i) in operators" :key="i" :label="v.title +' ('+v.id+')'" :value="v.id"></v-radio>
+                <v-radio-group class="m-0" v-model="reqData.mnc" dense>
+                    <v-radio v-for="(v, i) in operators" dense :key="i" :label="v.title +' ('+v.id+')'" :value="v.id"></v-radio>
                 </v-radio-group>
                 <div class="flex gap-x-4 items-center justify-start">
-                    <label class="m-0 p-0">LAC:</label>
-                    <v-text-field dense type="number" hide-details flat light class="p-0 m-0 border-b" v-model="reqData.Lac" />
-                </div>
-                <div class="flex gap-x-4 items-center justify-start">
-                    <label class="m-0 p-0">CID:</label>
-                    <v-text-field dense type="number" hide-details flat light class="p-0 m-0" v-model="reqData.Cid" />
+<!--                    <label class="m-0 p-0">LAC:</label>-->
+                    <v-text-field dense type="number" label="LAC" hide-details flat light class="p-0 m-0 border-b" v-model="reqData.Lac" />
+<!--                </div>-->
+<!--                <div class="flex gap-x-4 items-center justify-start">-->
+<!--                    <label class="m-0 p-0">CID:</label>-->
+                    <v-text-field dense type="number" label="CID" hide-details flat light class="p-0 m-0" v-model="reqData.Cid" />
                 </div>
             </v-card-text>
             <v-card-actions>
-                <v-btn @click="getBs()" class="max-w-full" color="success">Поиск</v-btn>
-                <v-btn @click="clearMap()" class="max-w-full" >Отчистить</v-btn>
+                <v-btn elevation="0" @click="getBs()" class="w-32" color="success">Поиск</v-btn>
+                <v-btn elevation="0" @click="clearMap()" size="sm" flat class="max-w-full" >Отчистить</v-btn>
             </v-card-actions>
         </v-card>
         <div class="md:hidden w-full my-2 border px-3" v-html="bsInfo"></div>
-        <div class="w-full p-4 my-2 border overflow-hidden md:h-3/4 sm:h-80" id="maps" style="max-height: 700px; min-height: 300px;"></div>
+        <div class="w-full p-4 my-2 border overflow-hidden auto-height-map" id="maps" style=""></div>
     </v-card>
     <v-snackbar v-model="toast.state" :color="toast.type" top>
         {{toast.message}}

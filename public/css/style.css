@@ -27725,3 +27725,14 @@ html body::-webkit-scrollbar-thumb {
 .leaflet-right .leaflet-control a {
   display: none;
 }
+
+@media (max-width: 600px) {
+  .auto-height-map {
+    height: 300px;
+  }
+}
+@media (min-width: 600px) {
+  .auto-height-map {
+    height: 750px;
+  }
+}

@@ -29747,6 +29747,7 @@ var render = function () {
                     "v-radio-group",
                     {
                       staticClass: "m-0",
+                      attrs: { dense: "" },
                       model: {
                         value: _vm.reqData.mnc,
                         callback: function ($$v) {
@@ -29759,6 +29760,7 @@ var render = function () {
                       return _c("v-radio", {
                         key: i,
                         attrs: {
+                          dense: "",
                           label: v.title + " (" + v.id + ")",
                           value: v.id,
                         },
@@ -29771,13 +29773,12 @@ var render = function () {
                     "div",
                     { staticClass: "flex gap-x-4 items-center justify-start" },
                     [
-                      _c("label", { staticClass: "m-0 p-0" }, [_vm._v("LAC:")]),
-                      _vm._v(" "),
                       _c("v-text-field", {
                         staticClass: "p-0 m-0 border-b",
                         attrs: {
                           dense: "",
                           type: "number",
+                          label: "LAC",
                           "hide-details": "",
                           flat: "",
                           light: "",
@@ -29790,21 +29791,13 @@ var render = function () {
                           expression: "reqData.Lac",
                         },
                       }),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex gap-x-4 items-center justify-start" },
-                    [
-                      _c("label", { staticClass: "m-0 p-0" }, [_vm._v("CID:")]),
                       _vm._v(" "),
                       _c("v-text-field", {
                         staticClass: "p-0 m-0",
                         attrs: {
                           dense: "",
                           type: "number",
+                          label: "CID",
                           "hide-details": "",
                           flat: "",
                           light: "",
@@ -29830,8 +29823,8 @@ var render = function () {
                   _c(
                     "v-btn",
                     {
-                      staticClass: "max-w-full",
-                      attrs: { color: "success" },
+                      staticClass: "w-32",
+                      attrs: { elevation: "0", color: "success" },
                       on: {
                         click: function ($event) {
                           return _vm.getBs()
@@ -29845,6 +29838,7 @@ var render = function () {
                     "v-btn",
                     {
                       staticClass: "max-w-full",
+                      attrs: { elevation: "0", size: "sm", flat: "" },
                       on: {
                         click: function ($event) {
                           return _vm.clearMap()
@@ -29867,8 +29861,7 @@ var render = function () {
           _vm._v(" "),
           _c("div", {
             staticClass:
-              "w-full p-4 my-2 border overflow-hidden md:h-3/4 sm:h-80",
-            staticStyle: { "max-height": "700px", "min-height": "300px" },
+              "w-full p-4 my-2 border overflow-hidden auto-height-map",
             attrs: { id: "maps" },
           }),
         ],
