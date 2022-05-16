@@ -15,6 +15,7 @@ class GeoResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'status'=>200,
             'lat'=>$this->site_lat,
             'lon'=>$this->site_lon,
             'azimuth'=>$this->azimuth,

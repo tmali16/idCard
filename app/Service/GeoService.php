@@ -15,9 +15,18 @@ class GeoService
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));
         $mnc = $request->get('mnc');
-        $lac = $request->get('Lac');
-        $ci = $request->get('Cid');
-
+        $lacCi = $request->get('Lac');
+//        $ci = $request->get('Cid');
+        $LacCi = explode(":", trim($lacCi));
+//        dd(count($LacCi));
+        if (count($LacCi) <= 1 || !$mnc){
+            return response()->json([
+                'status'=>500,
+                'messages'=>'Данные введены не верно!'
+            ]);
+        }
+        $lac = $LacCi[0];
+        $ci = $LacCi[1];
         $geo = Geo::query()
                 ->where([
                     ['mnc', '=', $mnc],

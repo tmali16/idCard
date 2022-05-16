@@ -2302,8 +2302,12 @@ __webpack_require__.r(__webpack_exports__);
     getBs: function getBs() {
       var _this = this;
 
-      if (this.reqData.Cid.length >= 2 && this.reqData.Lac.length >= 2) {
+      if (this.reqData.Lac.length >= 2 && this.reqData.mnc.length !== 0) {
         axios.post('/api/geo/search', this.reqData).then(function (o) {
+          if (o.data.status !== undefined && parseInt(o.data.status) !== 200) {
+            _this.showToast(o.data.messages, "error");
+          }
+
           if (Array.isArray(o.data)) {
             if (o.data.length !== 0) {
               o.data.forEach(function (e) {
@@ -2317,7 +2321,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(e.message);
         });
       } else {
-        console.log("длина лак и сид");
+        this.showToast("Не все поля заполнены", "error");
       }
     },
     createSector: function createSector(LatLon, direction) {
@@ -29772,8 +29776,8 @@ var render = function () {
                         staticClass: "p-0 m-0 border-b",
                         attrs: {
                           dense: "",
-                          type: "number",
-                          label: "LAC",
+                          type: "text",
+                          label: "LAC:CELLID",
                           "hide-details": "",
                           flat: "",
                           light: "",
@@ -29784,25 +29788,6 @@ var render = function () {
                             _vm.$set(_vm.reqData, "Lac", $$v)
                           },
                           expression: "reqData.Lac",
-                        },
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        staticClass: "p-0 m-0",
-                        attrs: {
-                          dense: "",
-                          type: "number",
-                          label: "CID",
-                          "hide-details": "",
-                          flat: "",
-                          light: "",
-                        },
-                        model: {
-                          value: _vm.reqData.Cid,
-                          callback: function ($$v) {
-                            _vm.$set(_vm.reqData, "Cid", $$v)
-                          },
-                          expression: "reqData.Cid",
                         },
                       }),
                     ],

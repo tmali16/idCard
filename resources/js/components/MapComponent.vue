@@ -11,11 +11,11 @@
                 </v-radio-group>
                 <div class="flex gap-x-4 items-center justify-start">
 <!--                    <label class="m-0 p-0">LAC:</label>-->
-                    <v-text-field dense type="number" label="LAC" hide-details flat light class="p-0 m-0 border-b" v-model="reqData.Lac" />
+                    <v-text-field dense type="text" label="LAC:CELLID" hide-details flat light class="p-0 m-0 border-b" v-model="reqData.Lac" />
 <!--                </div>-->
 <!--                <div class="flex gap-x-4 items-center justify-start">-->
 <!--                    <label class="m-0 p-0">CID:</label>-->
-                    <v-text-field dense type="number" label="CID" hide-details flat light class="p-0 m-0" v-model="reqData.Cid" />
+<!--                    <v-text-field dense type="number" label="CID" hide-details flat light class="p-0 m-0" v-model="reqData.Cid" />-->
                 </div>
             </v-card-text>
             <v-card-actions>
@@ -86,8 +86,11 @@ export default {
             }).addTo(this.map);
         },
         getBs(){
-            if (this.reqData.Cid.length >= 2 && this.reqData.Lac.length >= 2) {
+            if (this.reqData.Lac.length >= 2 && this.reqData.mnc.length !== 0) {
                 axios.post('/api/geo/search', this.reqData).then(o => {
+                    if(o.data.status !== undefined && parseInt(o.data.status) !== 200){
+                        this.showToast(o.data.messages, "error")
+                    }
                     if(Array.isArray(o.data)) {
                         if(o.data.length !== 0){
                             o.data.forEach((e)=>{
@@ -101,7 +104,7 @@ export default {
                     console.log(e.message)
                 })
             }else{
-                console.log("длина лак и сид")
+                this.showToast("Не все поля заполнены", "error")
             }
         },
         createSector(LatLon, direction){
