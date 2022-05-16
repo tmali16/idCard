@@ -29727,12 +29727,7 @@ var render = function () {
             {
               staticClass: "sm:absolute md:left-10 md:top-16 sm:px-2",
               staticStyle: { "z-index": "500" },
-              attrs: {
-                flat: "",
-                elevation: "0",
-                "max-width": "500",
-                width: "300",
-              },
+              attrs: { elevation: "0", "max-width": "500", width: "300" },
             },
             [
               _c("div", { staticClass: "px-2 py-1 text-blue-600 text-lg" }, [
@@ -29838,7 +29833,7 @@ var render = function () {
                     "v-btn",
                     {
                       staticClass: "max-w-full",
-                      attrs: { elevation: "0", size: "sm", flat: "" },
+                      attrs: { elevation: "0", size: "sm" },
                       on: {
                         click: function ($event) {
                           return _vm.clearMap()

@@ -1,7 +1,7 @@
 <template>
 <v-app class="h-screen">
     <v-card class="relative" flat>
-        <v-card class="sm:absolute md:left-10 md:top-16 sm:px-2" flat style="z-index: 500;" elevation="0" max-width="500" width="300">
+        <v-card class="sm:absolute md:left-10 md:top-16 sm:px-2" style="z-index: 500;" elevation="0" max-width="500" width="300">
             <div class="px-2 py-1 text-blue-600 text-lg">
                 Поиск
             </div>
@@ -20,7 +20,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn elevation="0" @click="getBs()" class="w-32" color="success">Поиск</v-btn>
-                <v-btn elevation="0" @click="clearMap()" size="sm" flat class="max-w-full" >Отчистить</v-btn>
+                <v-btn elevation="0" @click="clearMap()" size="sm" class="max-w-full" >Отчистить</v-btn>
             </v-card-actions>
         </v-card>
         <div class="md:hidden w-full my-2 border px-3" v-html="bsInfo"></div>
