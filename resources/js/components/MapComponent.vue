@@ -10,7 +10,11 @@
                     <v-radio v-for="(v, i) in operators" dense :key="i" :label="v.title +' ('+v.id+')'" :value="v.id"></v-radio>
                 </v-radio-group>
                 <div class="flex gap-x-4 items-center justify-start">
-                <v-text-field dense type="text" label="LAC и CELLID" hint="LAC и СID пишите через пробел" flat class="p-0 m-0" v-model="reqData.LacCid" />
+                <div class="flex flex-col text-center">
+                    <v-text-field dense type="text" label="LAC и CELLID" hint="LAC и СID пишите через пробел" flat class="p-0 m-0" v-model="reqData.LacCid" />
+                    <b class="text-red-600 text-xs justify-center">ИЛИ</b>
+                    <v-text-field dense type="text" label="BS NAME" hint="Название секотора базы" flat class="p-0 m-0" v-model="reqData.bs_name" />
+                </div>
                 </div>
             </v-card-text>
             <v-card-actions>
@@ -93,6 +97,7 @@ export default {
             reqData:{
                 LacCid: '',
                 mnc: '1',
+                bs_name: '',
             },
             saveImg:{
                 state:false,
@@ -142,7 +147,7 @@ export default {
             }).addTo(this.map);
         },
         getBs(){
-            if (this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0) {
+            if ((this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0) || this.reqData.bs_name.length > 3) {
                 axios.post('/api/geo/search', this.reqData).then(o => {
                     if(o.data.status !== undefined && parseInt(o.data.status) !== 200){
                         this.showToast(o.data.messages, "error")

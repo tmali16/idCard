@@ -2288,6 +2288,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 // require('leaflet.bigimage')
 
 
@@ -2297,7 +2301,8 @@ __webpack_require__.r(__webpack_exports__);
       tab: [],
       reqData: {
         LacCid: '',
-        mnc: '1'
+        mnc: '1',
+        bs_name: ''
       },
       saveImg: {
         state: false,
@@ -2360,7 +2365,7 @@ __webpack_require__.r(__webpack_exports__);
     getBs: function getBs() {
       var _this = this;
 
-      if (this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0) {
+      if (this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0 || this.reqData.bs_name.length > 3) {
         axios.post('/api/geo/search', this.reqData).then(function (o) {
           if (o.data.status !== undefined && parseInt(o.data.status) !== 200) {
             _this.showToast(o.data.messages, "error");
@@ -29885,25 +29890,58 @@ var render = function () {
                     "div",
                     { staticClass: "flex gap-x-4 items-center justify-start" },
                     [
-                      _c("v-text-field", {
-                        staticClass: "p-0 m-0",
-                        attrs: {
-                          dense: "",
-                          type: "text",
-                          label: "LAC и CELLID",
-                          hint: "LAC и СID пишите через пробел",
-                          flat: "",
-                        },
-                        model: {
-                          value: _vm.reqData.LacCid,
-                          callback: function ($$v) {
-                            _vm.$set(_vm.reqData, "LacCid", $$v)
-                          },
-                          expression: "reqData.LacCid",
-                        },
-                      }),
-                    ],
-                    1
+                      _c(
+                        "div",
+                        { staticClass: "flex flex-col text-center" },
+                        [
+                          _c("v-text-field", {
+                            staticClass: "p-0 m-0",
+                            attrs: {
+                              dense: "",
+                              type: "text",
+                              label: "LAC и CELLID",
+                              hint: "LAC и СID пишите через пробел",
+                              flat: "",
+                            },
+                            model: {
+                              value: _vm.reqData.LacCid,
+                              callback: function ($$v) {
+                                _vm.$set(_vm.reqData, "LacCid", $$v)
+                              },
+                              expression: "reqData.LacCid",
+                            },
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b",
+                            {
+                              staticClass:
+                                "text-red-600 text-xs justify-center",
+                            },
+                            [_vm._v("ИЛИ")]
+                          ),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            staticClass: "p-0 m-0",
+                            attrs: {
+                              dense: "",
+                              type: "text",
+                              label: "BS NAME",
+                              hint: "Название секотора базы",
+                              flat: "",
+                            },
+                            model: {
+                              value: _vm.reqData.bs_name,
+                              callback: function ($$v) {
+                                _vm.$set(_vm.reqData, "bs_name", $$v)
+                              },
+                              expression: "reqData.bs_name",
+                            },
+                          }),
+                        ],
+                        1
+                      ),
+                    ]
                   ),
                 ],
                 1

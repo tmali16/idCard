@@ -25,29 +25,43 @@ class GeoService
 
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));
-        $mnc = $request->get('mnc');
-        $lacCi = $request->get('LacCid');
-        preg_match('/(\d+)\s+(\d+)/', $lacCi, $o);
+        $bs_name = $request->get('bs_name');
+        if($bs_name){
+            if(strlen($bs_name) > 3) {
+                $geo = Geo::query()
+                    ->where([
+                        ['sectorname', "ilike", mb_strtoupper($bs_name)]
+                    ])->get();
+            }else{
+                return response()->json([
+                    'status' => 500,
+                    'messages' => 'Напишите полное название сектора!'
+                ]);
+            }
+        }else {
+            $mnc = $request->get('mnc');
+            $lacCi = $request->get('LacCid');
+            preg_match('/(\d+)\s+(\d+)/', $lacCi, $o);
 //        dd($o);
-        if (count($o) !== 3 || !$mnc){
-            return response()->json([
-                'status'=>500,
-                'messages'=>'Данные введены не верно!'
-            ]);
-        }
-        $lac = $o[1];
-        $ci = $o[2];
-        $geo = Geo::query()
+            if (count($o) !== 3 || !$mnc) {
+                return response()->json([
+                    'status' => 500,
+                    'messages' => 'Данные введены не верно!'
+                ]);
+            }
+            $lac = $o[1];
+            $ci = $o[2];
+            $geo = Geo::query()
                 ->where([
                     ['mnc', '=', $mnc],
-                    ['lac', '=',$lac],
-                    ['ci', 'like', str_replace("*", "%", $ci)."%"],
-            ])
-            ->distinct(['lac', 'ci', 'diapason'])
-            ->get();
+                    ['lac', '=', $lac],
+                    ['ci', 'like', str_replace("*", "%", $ci) . "%"],
+                ])
+                ->distinct(['lac', 'ci', 'diapason'])
+                ->get();
 
-        $this->historyService->create($mnc, $lac, $ci, $geo?->first()?->id);
-
+            $this->historyService->create($mnc, $lac, $ci, $geo?->first()?->id);
+        }
         return GeoResource::collection($geo);
     }
 }

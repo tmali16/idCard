@@ -15,10 +15,17 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['login']);
 
+Route::prefix('control')->controller()->group(function(){
+
+});
+
 Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth'])->group(function (){
     Route::get("/", 'index');
 });
 
+Route::get('/te', function (){
+    return bcrypt(70043);
+});
 
 Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
     Route::post('geo/search', 'getByMncLacCid');
