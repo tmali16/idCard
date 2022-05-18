@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Auth::routes(['login']);
+
+Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth'])->group(function (){
+    Route::get("/", 'index');
 });
 
-Route::controller(\App\Http\Controllers\MapController::class)->group(function (){
-    Route::get("map", 'index');
+
+Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
+    Route::post('geo/search', 'getByMncLacCid');
+    Route::get('geo/history', 'getLastRequest');
 });

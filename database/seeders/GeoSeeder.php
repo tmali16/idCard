@@ -18,30 +18,14 @@ class GeoSeeder extends Seeder
     {
         ini_set('memory_limit', -1);
         $f =  ("H://bsfordb_11052022.csv");
+//        $f =  ("H://all2.csv");
         $ar = $this->csvs($f);
-        $id=429333;
+        $id=91709;
         foreach ($ar as $key=> $r) {
             $old = Geo::where('lac', $r['lac'])->where('ci', $r['ci'])->where('mnc', $r['mnc'])->where('azimuth', $r['azimuth'])->count();
             if($old == 0) {
                 $da = [];
                 try {
-//                    $da = [];
-//                    foreach ($r as $k => $v) {
-//                        switch ($k) {
-//                            case '﻿mcc':
-//                                $da['mcc']=(int)$v;
-//                                break;
-//                            case 'site_lon' || 'site_lat' || 'cvr_cntr_lon' || 'cvr_cntr_lat':
-//                                $da[$k] = str_replace(',', '.', $v);
-//                                break;
-//                            case "height":
-//                                $da['height'] = null;
-//                                break;
-//                            default:
-//                                $da[$k] = strlen(trim($v)) === 0 ? NULL : trim($v);
-//                                break;
-//                        }
-//                    }
                     print_r($id . "\n");
                     $da = [
                         'id'=>$id,
@@ -68,11 +52,11 @@ class GeoSeeder extends Seeder
                         'site_lat'=>str_replace(',', '.', $r['site_lat']),
                     ];
 //                    var_dump($da);
-                    Geo::insert($da);
+                    Geo::create($da);
                     $id =  $id+1;
                 } catch (\Exception $e) {
 //                    print_r($da['ci'] . "\n");
-//                    print_r($e->getMessage());
+                    print_r($e->getMessage());
 //                    Log::error($da['ci']  . "; " .$e->getMessage());
 //                    break;
                 }

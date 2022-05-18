@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GeoResource extends JsonResource
+class HistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,16 +15,10 @@ class GeoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'status'=>200,
-            'lat'=>$this->site_lat,
-            'lon'=>$this->site_lon,
-            'diapason'=>$this->diapason,
-            'azimuth'=>$this->azimuth,
             'lac'=>$this->lac,
             'ci'=>$this->ci,
             'mnc'=>$this->mnc,
-            'address'=>$this->adress,
-            'sector_name'=>$this->sectorname,
+            'cell'=>new GeoResource($this->cell)
         ];
     }
 }

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Geo extends Model
 {
     use HasFactory;
-    protected $table = "t_cellid_geo";
+    protected $table = "cell_id_geo";
+//    protected $table = "t_cellid_geo";
     public $timestamps = false;
     protected $fillable = ['*'];
 }

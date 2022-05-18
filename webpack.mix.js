@@ -19,27 +19,4 @@ mix.js('resources/js/app.js', 'public/js').lang()
         require('postcss-import'),
         require('tailwindcss'),
         require('autoprefixer'),
-    ]);
-
-mix
-    // .webpackConfig({
-    //     plugins:[
-    //     ],
-    //     resolve: {
-    //         alias: {
-    //             '@lang': path.resolve('./lang'),
-    //         },
-    //     },
-    //     module: {
-    //         rules: [
-    //             {
-    //                 test: /[\\\/]lang.+\.(php)$/,
-    //                 loader: 'php-array-loader',
-    //             },
-    //         ],
-    //     },
-    //     stats: {
-    //         children: false
-    //     }
-    // })
-    .disableNotifications();
+    ]).disableNotifications();

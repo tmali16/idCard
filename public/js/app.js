@@ -2244,15 +2244,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // require('leaflet.bigimage')
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      tab: [],
       reqData: {
-        Lac: '',
-        Cid: '',
+        LacCid: '',
         mnc: '1'
       },
       saveImg: {
@@ -2261,28 +2305,42 @@ __webpack_require__.r(__webpack_exports__);
       },
       operators: [{
         id: 1,
-        title: 'Билайн'
+        title: 'Билайн',
+        color: '#FFCA33'
       }, {
         id: 5,
-        title: 'Мегаком'
+        title: 'Мегаком',
+        color: '#76b62a'
       }, {
         id: 9,
-        title: 'О!'
+        title: 'О!',
+        color: '#e2007a'
       }],
       map: null,
       layers: [],
       currentLotLan: '',
-      defZoom: 15,
+      defZoom: 16,
+      bsData: [],
+      sectorOutline: {
+        color: '#ffca33',
+        dashArray: [20, 10],
+        weight: 1,
+        opacity: 1,
+        fillColor: '#fffca33',
+        fillOpacity: 0.3
+      },
       toast: {
         state: false,
         type: 'info',
         message: ''
       },
-      bsInfo: ''
+      bsInfo: '',
+      requestHistory: []
     };
   },
   mounted: function mounted() {
     this.init();
+    this.getHistory();
   },
   methods: {
     init: function init() {
@@ -2302,7 +2360,7 @@ __webpack_require__.r(__webpack_exports__);
     getBs: function getBs() {
       var _this = this;
 
-      if (this.reqData.Lac.length >= 2 && this.reqData.mnc.length !== 0) {
+      if (this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0) {
         axios.post('/api/geo/search', this.reqData).then(function (o) {
           if (o.data.status !== undefined && parseInt(o.data.status) !== 200) {
             _this.showToast(o.data.messages, "error");
@@ -2310,13 +2368,15 @@ __webpack_require__.r(__webpack_exports__);
 
           if (Array.isArray(o.data)) {
             if (o.data.length !== 0) {
-              o.data.forEach(function (e) {
-                _this.createBs(e);
-              });
+              _this.bsData = o.data;
+
+              _this.createBs(_this.bsData[0]);
             } else {
               _this.showToast("Не найдено");
             }
           }
+
+          _this.getHistory();
         })["catch"](function (e) {
           console.log(e.message);
         });
@@ -2324,25 +2384,32 @@ __webpack_require__.r(__webpack_exports__);
         this.showToast("Не все поля заполнены", "error");
       }
     },
-    createSector: function createSector(LatLon, direction) {
+    createSector: function createSector(LatLon, data) {
+      var mnc = this.operators.find(function (e) {
+        return e.id === data.mnc;
+      });
+      this.sectorOutline.color = mnc.color;
+      this.sectorOutline.fillColor = mnc.color;
       return new leaflet_radar__WEBPACK_IMPORTED_MODULE_0__["default"]({
-        radius: 450,
+        radius: 500,
         //Radius of radar sector,The unit is meter
         angle: 65,
         //Fan opening and closing angle 0-360
-        direction: parseInt(direction),
+        direction: parseInt(data.azimuth),
         // Fan orientation angle 0-360
         location: LatLon.join(", ") // Longitude dimension of sector start position
 
       }, {
-        online: {
-          color: '#ff0046',
-          // dashArray: [255, 2],
-          weight: 1,
-          opacity: 1,
-          fillColor: "#d21",
-          fillOpacity: 0.3
+        online: this.sectorOutline,
+        animat: {
+          color: '#238',
+          weight: 0,
+          opacity: 0,
+          fillColor: "#ff0",
+          fillOpacity: 0.05,
+          pmIgnore: false
         },
+        text: 'BS Station',
         step: 3 //The refresh distance of each frame of radar scanning animation. The unit is meter.
 
       });
@@ -2355,6 +2422,7 @@ __webpack_require__.r(__webpack_exports__);
       ar += '<h3 class="text-lg text-red-600"><b>БС:</b> ' + data.sector_name + '</h3>';
       ar += '<b>LAC:</b> ' + data.lac + '<br>';
       ar += '<b>CID:</b> ' + data.ci + '<br>';
+      ar += '<b>Диапазон:</b> ' + data.diapason + '<br>';
       ar += '<b>Азимут:</b> ' + data.azimuth + '<br>';
       ar += '<b>Оператор:</b> ' + mnc.title + ' (' + mnc.id + ')' + '<br>';
       ar += '<b>Адрес:</b> ' + data.address + '<br>';
@@ -2363,15 +2431,41 @@ __webpack_require__.r(__webpack_exports__);
       this.bsInfo = ar;
       return ar;
     },
+    hideBs: function hideBs(data) {
+      var _this2 = this;
+
+      var hide = 'mdi-eye-off';
+      var show = 'mdi-eye';
+      var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
+      this.layers.forEach(function (currentValue, index, array) {
+        if (currentValue.options.uid === uid) {
+          _this2.map.removeLayer(currentValue);
+
+          _this2.layers.splice(index, 1);
+        }
+      });
+    },
     createPopup: function createPopup(data, bs) {
       return L.popup({
         autoPanPaddingTopLeft: [0, 30],
         autoPanPaddingBottomRight: [0, 30]
       }).setLatLng(data.lat + ", " + data.lon).setContent(this.createInfo(data));
     },
+    zoom: function zoom() {
+      console.log(this.map);
+    },
     createBs: function createBs(data) {
+      var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
+
+      for (var i = 0; i < this.layers.length; i++) {
+        if (this.layers[i].options.uid === uid) {
+          this.createInfo(data);
+          return;
+        }
+      }
+
       var LatLon = [data.lat, data.lon];
-      var sector = this.createSector(LatLon, data.azimuth);
+      var sector = this.createSector(LatLon, data).bindPopup(this.createPopup(data, bs)).openPopup();
       var icon = L.icon({
         iconSize: [48, 48],
         iconAnchor: [24, 48],
@@ -2384,31 +2478,29 @@ __webpack_require__.r(__webpack_exports__);
       });
       var antenna = L.marker(LatLon, {
         icon: icon
-      }).bindPopup(this.createPopup(data, bs)).openPopup();
-      var BsSector = L.layerGroup([bs, antenna, sector]);
+      }); // .bindPopup(this.createPopup(data, bs))
+      // .openPopup()
+
+      var BsSector = L.layerGroup([bs, sector], {
+        uid: uid
+      });
       this.layers.push(BsSector);
       BsSector.addTo(this.map);
       this.map.fitBounds(bs.getBounds());
-      this.map.setZoom(this.defZoom);
+
+      if (this.map.getZoom() !== this.defZoom) {
+        this.map.setZoom(16);
+      }
+
       this.currentLotLan = LatLon;
     },
     clearMap: function clearMap() {
-      for (var i = 0; i < this.layers.length; i++) {
-        if (this.layers[i] != null) {
-          this.map.removeLayer(this.layers[i]);
-        }
-      }
-    },
-    getImage: function getImage() {
-      var _this2 = this;
+      var _this3 = this;
 
-      this.map.setView(this.currentLotLan); // this.map.setZoom(19)
+      this.layers.forEach(function (currentValue, index, array) {
+        _this3.map.removeLayer(currentValue);
 
-      html2canvas__WEBPACK_IMPORTED_MODULE_1___default()(document.getElementById("maps"), {
-        useCORS: true
-      }).then(function (canvas) {
-        _this2.saveImg.src = canvas.toDataURL();
-        _this2.saveImg.state = true;
+        _this3.layers.splice(index, 1);
       });
     },
     getZoom: function getZoom() {
@@ -2434,7 +2526,7 @@ __webpack_require__.r(__webpack_exports__);
       return 0; //default
     },
     showToast: function showToast(msg) {
-      var _this3 = this;
+      var _this4 = this;
 
       var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "info";
       var color = "";
@@ -2457,8 +2549,24 @@ __webpack_require__.r(__webpack_exports__);
       this.toast.message = msg;
       this.toast.state = true;
       setTimeout(function () {
-        _this3.toast.state = false;
+        _this4.toast.state = false;
       }, 5000);
+    },
+    changeDb: function changeDb(item) {
+      this.createBs(item);
+    },
+    getHistory: function getHistory() {
+      var _this5 = this;
+
+      axios.get('/api/geo/history').then(function (o) {
+        _this5.requestHistory = o.data;
+      })["catch"](function (e) {
+        _this5.showToast("Ошибка запроса истории", 'history');
+      });
+    },
+    historyBsAdd: function historyBsAdd(item) {
+      if (!item) return;
+      this.createBs(item);
     }
   }
 });
@@ -11315,6 +11423,7 @@ var Renderer = L.Canvas.extend({
     },
     initialize: function (options) {
         options = L.Util.setOptions(this, options);
+
         //add
         L.Util.stamp(this);
         this._layers = this._layers || {};
@@ -11438,9 +11547,9 @@ var Renderer = L.Canvas.extend({
         }
         var gradient = ctx.createRadialGradient(p.x, p.y / s, 0, p.x, p.y / s, r);//ctx.createLinearGradient(0, 0, 1200, 600);
         // 线性渐变
-        gradient.addColorStop(0, 'rgb(246,122,122)');
-        gradient.addColorStop(1, 'rgb(255,0,0)');
-        layer.options.fillColor = gradient
+        gradient.addColorStop(0, 'rgb(0,0,255)');
+        gradient.addColorStop(1, 'rgb(255,255,0)');
+        layer.options.fillColor = layer.options.fillColor
         this._fillStroke(ctx, layer);
     },
 
@@ -11501,8 +11610,11 @@ var Renderer = L.Canvas.extend({
             } else {
                 ctx.fillStyle = layer.options.textColor;
             }
+            console.log(layer.options)
 
-            ctx.fillText(layer.options.text, p.x + offsetX, p.y
+            // ctx.fillText(layer.options.text, p.x + offsetX, p.y
+            //     + offsetY);
+            ctx.fillText("text test", p.x + offsetX, p.y
                 + offsetY);
         }
     },
@@ -11552,6 +11664,7 @@ var Renderer = L.Canvas.extend({
                 ctx.setLineDash(layer.options && layer.options._dashArray || []);
                 ctx.lineDashOffset = layer.options && layer.options._dashOffset || 0;
             }
+
             ctx.globalAlpha = options.opacity;
             ctx.lineWidth = options.weight;
             ctx.strokeStyle = options.color;
@@ -29773,21 +29886,20 @@ var render = function () {
                     { staticClass: "flex gap-x-4 items-center justify-start" },
                     [
                       _c("v-text-field", {
-                        staticClass: "p-0 m-0 border-b",
+                        staticClass: "p-0 m-0",
                         attrs: {
                           dense: "",
                           type: "text",
-                          label: "LAC:CELLID",
-                          "hide-details": "",
+                          label: "LAC и CELLID",
+                          hint: "LAC и СID пишите через пробел",
                           flat: "",
-                          light: "",
                         },
                         model: {
-                          value: _vm.reqData.Lac,
+                          value: _vm.reqData.LacCid,
                           callback: function ($$v) {
-                            _vm.$set(_vm.reqData, "Lac", $$v)
+                            _vm.$set(_vm.reqData, "LacCid", $$v)
                           },
-                          expression: "reqData.Lac",
+                          expression: "reqData.LacCid",
                         },
                       }),
                     ],
@@ -29834,10 +29946,216 @@ var render = function () {
             1
           ),
           _vm._v(" "),
-          _c("div", {
-            staticClass: "md:hidden w-full my-2 border px-3",
-            domProps: { innerHTML: _vm._s(_vm.bsInfo) },
-          }),
+          _c(
+            "v-card",
+            {
+              staticClass: "sm:absolute md:right-10 md:top-16 sm:px-2",
+              staticStyle: { "z-index": "500" },
+              attrs: { elevation: "0", "max-width": "500", "min-width": "300" },
+            },
+            [
+              _c(
+                "v-tabs",
+                {
+                  model: {
+                    value: _vm.tab,
+                    callback: function ($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab",
+                  },
+                },
+                [
+                  _c("v-tab", [_vm._v("Секторы")]),
+                  _vm._v(" "),
+                  _c("v-tab", [_vm._v("Инфо по Сек.")]),
+                  _vm._v(" "),
+                  _c("v-tab", [_vm._v("История")]),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tabs-items",
+                {
+                  model: {
+                    value: _vm.tab,
+                    callback: function ($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab",
+                  },
+                },
+                [
+                  _c(
+                    "v-tab-item",
+                    [
+                      _c(
+                        "v-list",
+                        {
+                          staticClass: "overflow-auto",
+                          staticStyle: { "max-height": "300px" },
+                        },
+                        [
+                          _c(
+                            "v-list-item-group",
+                            { attrs: { color: "primary" } },
+                            _vm._l(_vm.bsData, function (item, i) {
+                              return _c(
+                                "v-list-item",
+                                { key: i },
+                                [
+                                  _c(
+                                    "v-list-item-icon",
+                                    [_c("v-icon", [_vm._v("mdi-radio-tower")])],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item-content",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.changeDb(item)
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c("v-list-item-title", {
+                                        domProps: {
+                                          textContent: _vm._s(item.sector_name),
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-list-item-subtitle", {
+                                        domProps: {
+                                          textContent: _vm._s(item.diapason),
+                                        },
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item-action",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.hideBs(item)
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        { attrs: { color: "grey lighten-1" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                        mdi-close\n                                    "
+                                          ),
+                                        ]
+                                      ),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                1
+                              )
+                            }),
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-tab-item", [
+                    _c("div", {
+                      staticClass: " w-full my-2 border px-3",
+                      domProps: { innerHTML: _vm._s(_vm.bsInfo) },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-tab-item",
+                    [
+                      _c(
+                        "v-list",
+                        {
+                          staticClass: "overflow-auto",
+                          staticStyle: { "max-height": "300px" },
+                        },
+                        [
+                          _c(
+                            "v-list-item-group",
+                            { attrs: { color: "primary" } },
+                            _vm._l(_vm.requestHistory, function (item, i) {
+                              return _c(
+                                "v-list-item",
+                                { key: i },
+                                [
+                                  _c(
+                                    "v-list-item-content",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.historyBsAdd(item.cell)
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c("v-list-item-title", {
+                                        domProps: {
+                                          textContent: _vm._s(
+                                            item.lac + " " + item.ci
+                                          ),
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-list-item-subtitle", {
+                                        domProps: {
+                                          textContent: _vm._s(
+                                            item.cell !== null
+                                              ? "Найдено"
+                                              : "Не найдено"
+                                          ),
+                                        },
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                1
+                              )
+                            }),
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              on: {
+                click: function ($event) {
+                  return _vm.zoom()
+                },
+              },
+            },
+            [_vm._v("zoom")]
+          ),
           _vm._v(" "),
           _c("div", {
             staticClass:
