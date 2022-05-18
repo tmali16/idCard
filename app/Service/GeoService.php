@@ -28,10 +28,10 @@ class GeoService
         $bs_name = $request->get('bs_name');
         if($bs_name){
             if(strlen($bs_name) > 3) {
-                $geo = Geo::query()
+                $geoQuery = Geo::query()
                     ->where([
                         ['sectorname', "ilike", mb_strtoupper($bs_name)]
-                    ])->get();
+                    ]);
             }else{
                 return response()->json([
                     'status' => 500,
@@ -51,17 +51,15 @@ class GeoService
             }
             $lac = $o[1];
             $ci = $o[2];
-            $geo = Geo::query()
+            $geoQuery = Geo::query()
                 ->where([
                     ['mnc', '=', $mnc],
                     ['lac', '=', $lac],
                     ['ci', 'like', str_replace("*", "%", $ci) . "%"],
-                ])
-                ->distinct(['lac', 'ci', 'diapason'])
-                ->get();
+                ]);
 
-            $this->historyService->create($mnc, $lac, $ci, $geo?->first()?->id);
+            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
         }
-        return GeoResource::collection($geo);
+        return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'diapason'])->get());
     }
 }
