@@ -2292,6 +2292,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // require('leaflet.bigimage')
 
 
@@ -2299,6 +2317,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       tab: [],
+      hideHistory: true,
+      hideSector: true,
       reqData: {
         LacCid: '',
         mnc: '1',
@@ -2315,7 +2335,7 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 5,
         title: 'Мегаком',
-        color: '#76b62a'
+        color: '#2ab648'
       }, {
         id: 9,
         title: 'О!',
@@ -2352,8 +2372,9 @@ __webpack_require__.r(__webpack_exports__);
       this.map = L.map('maps', {
         zoomControl: false // attributionControl: false
 
-      });
-      this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5);
+      }); // this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5)
+
+      this.map.setView(new L.LatLng(42.8690, 74.5986), 12);
       L.control.scale({
         imperial: false,
         position: 'bottomright'
@@ -2451,13 +2472,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createPopup: function createPopup(data, bs) {
-      return L.popup({
-        autoPanPaddingTopLeft: [0, 30],
-        autoPanPaddingBottomRight: [0, 30]
+      return new L.Popup({
+        autoPan: false,
+        autoPanPadding: L.point(100, 900),
+        keepInView: false
       }).setLatLng(data.lat + ", " + data.lon).setContent(this.createInfo(data));
     },
     zoom: function zoom() {
-      console.log(this.map);
+      console.log(this.map.getBounds());
     },
     createBs: function createBs(data) {
       var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
@@ -2470,21 +2492,17 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var LatLon = [data.lat, data.lon];
-      var sector = this.createSector(LatLon, data).bindPopup(this.createPopup(data, bs)).openPopup();
-      var icon = L.icon({
-        iconSize: [48, 48],
-        iconAnchor: [24, 48],
-        popupAnchor: [-2, -24],
-        iconUrl: '/images/antenna.png'
-      });
+      var sector = this.createSector(LatLon, data); // let icon = L.icon({
+      //     iconSize: [48, 48],
+      //     iconAnchor: [24, 48],
+      //     popupAnchor:  [-2, -24],
+      //     iconUrl: '/images/antenna.png',
+      // })
+
       var bs = L.circle(LatLon).setStyle({
         fillColor: '#0073ff',
         opacity: 1
-      });
-      var antenna = L.marker(LatLon, {
-        icon: icon
-      }); // .bindPopup(this.createPopup(data, bs))
-      // .openPopup()
+      }).bindPopup(this.createPopup(data)).openPopup(); // .bindTooltip(this.createInfo(data), {permanent: false, }).openTooltip()
 
       var BsSector = L.layerGroup([bs, sector], {
         uid: uid
@@ -2500,13 +2518,15 @@ __webpack_require__.r(__webpack_exports__);
       this.currentLotLan = LatLon;
     },
     clearMap: function clearMap() {
-      var _this3 = this;
+      while (this.layers.length !== 0) {
+        for (var i = 0; i < this.layers.length; i++) {
+          this.map.removeLayer(this.layers[i]);
+          this.layers.splice(i, 1);
+        }
 
-      this.layers.forEach(function (currentValue, index, array) {
-        _this3.map.removeLayer(currentValue);
-
-        _this3.layers.splice(index, 1);
-      });
+        console.log(this.layers.length);
+        if (this.layers.length === 0) break;
+      }
     },
     getZoom: function getZoom() {
       if (!(this.map == null)) {
@@ -2531,7 +2551,7 @@ __webpack_require__.r(__webpack_exports__);
       return 0; //default
     },
     showToast: function showToast(msg) {
-      var _this4 = this;
+      var _this3 = this;
 
       var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "info";
       var color = "";
@@ -2554,19 +2574,32 @@ __webpack_require__.r(__webpack_exports__);
       this.toast.message = msg;
       this.toast.state = true;
       setTimeout(function () {
-        _this4.toast.state = false;
+        _this3.toast.state = false;
       }, 5000);
     },
     changeDb: function changeDb(item) {
       this.createBs(item);
     },
+    showAllSectors: function showAllSectors(bsDatas) {
+      for (var i = 0; i < bsDatas.length; i++) {
+        if (bsDatas[i] !== null) {
+          if (bsDatas[i].cell !== undefined) {
+            if (bsDatas[i].cell !== null) {
+              this.createBs(bsDatas[i].cell);
+            }
+          } else {
+            this.createBs(bsDatas[i]);
+          }
+        }
+      }
+    },
     getHistory: function getHistory() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get('/api/geo/history').then(function (o) {
-        _this5.requestHistory = o.data;
+        _this4.requestHistory = o.data;
       })["catch"](function (e) {
-        _this5.showToast("Ошибка запроса истории", 'history');
+        _this4.showToast("Ошибка запроса истории", 'history');
       });
     },
     historyBsAdd: function historyBsAdd(item) {
@@ -30029,8 +30062,83 @@ var render = function () {
                     "v-tab-item",
                     [
                       _c(
+                        "div",
+                        { staticClass: "flex gap-x-2 w-full justify-end" },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "py-1 px-2 my-1 mx-2",
+                              attrs: {
+                                color: "teal",
+                                dense: "",
+                                "x-small": "",
+                              },
+                              on: {
+                                click: function ($event) {
+                                  _vm.hideSector = !_vm.hideSector
+                                },
+                              },
+                            },
+                            [
+                              _vm.hideSector
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "text-white",
+                                      attrs: { small: "" },
+                                    },
+                                    [_vm._v("mdi-eye-off")]
+                                  )
+                                : _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "text-white",
+                                      attrs: { small: "" },
+                                    },
+                                    [_vm._v("mdi-eye")]
+                                  ),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "py-1 px-2 my-1 mx-2",
+                              attrs: {
+                                color: "primary",
+                                dense: "",
+                                "x-small": "",
+                              },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.showAllSectors(_vm.bsData)
+                                },
+                              },
+                            },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("mdi-map-marker-multiple-outline"),
+                              ]),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
                         "v-list",
                         {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.hideSector,
+                              expression: "hideSector",
+                            },
+                          ],
                           staticClass: "overflow-auto",
                           staticStyle: { "max-height": "300px" },
                         },
@@ -30120,8 +30228,72 @@ var render = function () {
                     "v-tab-item",
                     [
                       _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex gap-x-2 w-full justify-end text-white",
+                        },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: " py-1 px-2 my-1",
+                              attrs: { color: "teal", "x-small": "" },
+                              on: {
+                                click: function ($event) {
+                                  _vm.hideHistory = !_vm.hideHistory
+                                },
+                              },
+                            },
+                            [
+                              _vm.hideHistory
+                                ? _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v("mdi-eye-off"),
+                                  ])
+                                : _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v("mdi-eye"),
+                                  ]),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "py-1 px-2 my-1 mx-2",
+                              attrs: {
+                                color: "primary",
+                                dense: "",
+                                "x-small": "",
+                              },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.showAllSectors(_vm.requestHistory)
+                                },
+                              },
+                            },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("mdi-map-marker-multiple-outline"),
+                              ]),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
                         "v-list",
                         {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.hideHistory,
+                              expression: "hideHistory",
+                            },
+                          ],
                           staticClass: "overflow-auto",
                           staticStyle: { "max-height": "300px" },
                         },
@@ -30161,6 +30333,29 @@ var render = function () {
                                           ),
                                         },
                                       }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-item-action",
+                                    {
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.hideBs(item.cell)
+                                        },
+                                      },
+                                    },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        { attrs: { color: "grey lighten-1" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                            mdi-close\n                                        "
+                                          ),
+                                        ]
+                                      ),
                                     ],
                                     1
                                   ),

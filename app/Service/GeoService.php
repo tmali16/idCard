@@ -31,7 +31,7 @@ class GeoService
                 $geoQuery = Geo::query()
                     ->where([
                         ['sectorname', "ilike", mb_strtoupper($bs_name)]
-                    ]);
+                    ])->distinct(['sectorname', 'diapason']);
             }else{
                 return response()->json([
                     'status' => 500,

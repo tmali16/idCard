@@ -17,10 +17,10 @@ class GeoSeeder extends Seeder
     public function run()
     {
         ini_set('memory_limit', -1);
-        $f =  ("H://bsfordb_11052022.csv");
+        $f =  ("H://all_18052022.csv");
 //        $f =  ("H://all2.csv");
         $ar = $this->csvs($f);
-        $id=91709;
+        $id=Geo::query()->max('id')+1;
         foreach ($ar as $key=> $r) {
             $old = Geo::where('lac', $r['lac'])->where('ci', $r['ci'])->where('mnc', $r['mnc'])->where('azimuth', $r['azimuth'])->count();
             if($old == 0) {
@@ -41,15 +41,15 @@ class GeoSeeder extends Seeder
                         'type'=>$r['type'],
                         'azimuth'=>$r['azimuth'],
                         'inclination'=>strlen($r['inclination']) == 0 ? null: $r['inclination'],
-                        'height'=>strlen($r['height']) == 0 ? null: $r['height'],
+//                        'height'=>strlen($r['height']) == 0 ? null: round($r['height']),
                         'power'=>strlen($r['power']) == 0 ? null: $r['power'],
                         'amplification'=>strlen($r['amplification']) == 0 ? 0: $r['amplification'],
                         'bandwidth'=>strlen($r['bandwidth']) == 0 ? null: $r['bandwidth'],
                         'polarization'=>strlen($r['polarization']) == 0 ? null: $r['polarization'],
                         'controller'=>$r['controller'] ?? 0,
                         'g'=>strlen($r['g']) == 0 ? 0: $r['g'],
-                        'site_lon'=>str_replace(',', '.', $r['site_lon']),
-                        'site_lat'=>str_replace(',', '.', $r['site_lat']),
+                        'site_lon'=>str_replace(',', '.', trim($r['site_lon'])),
+                        'site_lat'=>str_replace(',', '.', trim($r['site_lat'])),
                     ];
 //                    var_dump($da);
                     Geo::create($da);

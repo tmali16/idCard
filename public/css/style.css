@@ -27736,3 +27736,11 @@ html body::-webkit-scrollbar-thumb {
     height: 750px;
   }
 }
+
+.leaflet-popup-content-wrapper {
+  pointer-events: none;
+}
+
+.leaflet-popup-tip-container {
+  pointer-events: none;
+}

@@ -30,7 +30,16 @@
             </v-tabs>
             <v-tabs-items v-model="tab" >
                 <v-tab-item >
-                    <v-list  class="overflow-auto" style="max-height: 300px;">
+                    <div class="flex gap-x-2 w-full justify-end">
+                        <v-btn @click="hideSector = !hideSector" color="teal" dense x-small class="py-1 px-2 my-1 mx-2">
+                            <v-icon small v-if="hideSector" class="text-white">mdi-eye-off</v-icon>
+                            <v-icon small v-else class="text-white">mdi-eye</v-icon>
+                        </v-btn>
+                        <v-btn color="primary" @click="showAllSectors(bsData)" dense x-small class="py-1 px-2 my-1 mx-2">
+                            <v-icon small>mdi-map-marker-multiple-outline</v-icon>
+                        </v-btn>
+                    </div>
+                    <v-list  class="overflow-auto" style="max-height: 300px;" v-show="hideSector">
                         <v-list-item-group color="primary">
                             <v-list-item v-for="(item, i) in bsData" :key="i" >
                                 <v-list-item-icon>
@@ -53,18 +62,27 @@
                     <div class=" w-full my-2 border px-3" v-html="bsInfo"></div>
                 </v-tab-item>
                 <v-tab-item>
-                    <v-list class="overflow-auto" style="max-height: 300px;">
+                    <div class="flex gap-x-2 w-full justify-end text-white">
+                        <v-btn class=" py-1 px-2 my-1" color="teal" x-small @click="hideHistory = !hideHistory">
+                            <v-icon small v-if="hideHistory">mdi-eye-off</v-icon>
+                            <v-icon small v-else>mdi-eye</v-icon>
+                        </v-btn>
+                        <v-btn color="primary" @click="showAllSectors(requestHistory)" dense x-small class="py-1 px-2 my-1 mx-2">
+                        <v-icon small>mdi-map-marker-multiple-outline</v-icon>
+                    </v-btn>
+                    </div>
+                    <v-list class="overflow-auto" style="max-height: 300px;" v-show="hideHistory">
                         <v-list-item-group color="primary">
                             <v-list-item v-for="(item, i) in requestHistory" :key="i">
                                 <v-list-item-content @click="historyBsAdd(item.cell)">
                                     <v-list-item-title v-text="item.lac + ' ' + item.ci"></v-list-item-title>
                                     <v-list-item-subtitle v-text="item.cell !== null ? 'Найдено' : 'Не найдено'"></v-list-item-subtitle>
                                 </v-list-item-content>
-        <!--                                <v-list-item-action @click="hideBs(item)">-->
-        <!--                                    <v-icon color="grey lighten-1">-->
-        <!--                                        mdi-close-->
-        <!--                                    </v-icon>-->
-        <!--                                </v-list-item-action>-->
+                                    <v-list-item-action @click="hideBs(item.cell)">
+                                        <v-icon color="grey lighten-1">
+                                            mdi-close
+                                        </v-icon>
+                                    </v-list-item-action>
                             </v-list-item>
                         </v-list-item-group>
                     </v-list>
@@ -94,6 +112,8 @@ export default {
     data() {
         return {
             tab:[],
+            hideHistory: true,
+            hideSector: true,
             reqData:{
                 LacCid: '',
                 mnc: '1',
@@ -103,7 +123,7 @@ export default {
                 state:false,
                 src: ''
             },
-            operators: [{id: 1, title:'Билайн', color: '#FFCA33'}, {id: 5, title:'Мегаком', color: '#76b62a'}, {id: 9, title:'О!', color: '#e2007a'}],
+            operators: [{id: 1, title:'Билайн', color: '#FFCA33'}, {id: 5, title:'Мегаком', color: '#2ab648'}, {id: 9, title:'О!', color: '#e2007a'}],
             map: null,
             layers:[],
             currentLotLan: '',
@@ -137,7 +157,8 @@ export default {
                 // attributionControl: false
 
             })
-            this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5)
+            // this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5)
+            this.map.setView(new L.LatLng(42.8690, 74.5986), 12)
             L.control.scale({
                 imperial: false,
                 position: 'bottomright'
@@ -221,14 +242,16 @@ export default {
             })
         },
         createPopup(data, bs){
-            return L.popup({
-                autoPanPaddingTopLeft: [0, 30],
-                autoPanPaddingBottomRight: [0, 30],
-            }).setLatLng(data.lat+", "+data.lon)
+            return new L.Popup({
+                autoPan: false,
+                autoPanPadding: L.point(100, 900),
+                keepInView: false
+            })
+                .setLatLng(data.lat+", "+data.lon)
             .setContent(this.createInfo(data))
         },
         zoom(){
-            console.log(this.map)
+            console.log(this.map.getBounds())
         },
         createBs(data){
             let uid = data.lac+'_'+data.ci+'_'+data.azimuth
@@ -238,20 +261,18 @@ export default {
                     return
                 }
             }
-
             let LatLon = [data.lat, data.lon]
-            let sector = this.createSector(LatLon,  data).bindPopup(this.createPopup(data, bs)).openPopup()
-            let icon = L.icon({
-                iconSize: [48, 48],
-                iconAnchor: [24, 48],
-                popupAnchor:  [-2, -24],
-                iconUrl: '/images/antenna.png',
-            })
+            let sector = this.createSector(LatLon,  data)
+            // let icon = L.icon({
+            //     iconSize: [48, 48],
+            //     iconAnchor: [24, 48],
+            //     popupAnchor:  [-2, -24],
+            //     iconUrl: '/images/antenna.png',
+            // })
             let bs = L.circle(LatLon)
-                .setStyle({fillColor: '#0073ff', opacity: 1,})
-            let antenna = L.marker(LatLon, {icon: icon})
-                // .bindPopup(this.createPopup(data, bs))
-                // .openPopup()
+                .setStyle({fillColor: '#0073ff', opacity: 1,}).bindPopup(this.createPopup(data))
+                .openPopup()
+                // .bindTooltip(this.createInfo(data), {permanent: false, }).openTooltip()
             let BsSector = L.layerGroup([bs,sector],{uid: uid})
             this.layers.push(BsSector);
             BsSector.addTo(this.map)
@@ -262,10 +283,15 @@ export default {
             this.currentLotLan = LatLon
         },
         clearMap(){
-            this.layers.forEach((currentValue, index, array)=>{
-                this.map.removeLayer(currentValue)
-                this.layers.splice(index, 1)
-            })
+            while (this.layers.length !== 0){
+                for(let i = 0; i < this.layers.length; i++){
+                    this.map.removeLayer(this.layers[i])
+                    this.layers.splice(i, 1)
+                }
+                console.log(this.layers.length)
+                if(this.layers.length === 0)
+                    break;
+            }
         },
         getZoom() {
             if (!(this.map == null)) {
@@ -309,6 +335,19 @@ export default {
         changeDb(item){
             this.createBs(item)
         },
+        showAllSectors(bsDatas){
+            for(let i =0; i < bsDatas.length; i++){
+                if(bsDatas[i] !== null) {
+                    if (bsDatas[i].cell !== undefined) {
+                        if (bsDatas[i].cell !== null) {
+                            this.createBs(bsDatas[i].cell);
+                        }
+                    } else {
+                        this.createBs(bsDatas[i]);
+                    }
+                }
+            }
+        },
         getHistory(){
           axios.get('/api/geo/history').then(o=>{
               this.requestHistory = o.data;
@@ -317,8 +356,8 @@ export default {
           })
         },
         historyBsAdd(item){
-            if(!item)return
-
+            if(!item)
+                return
             this.createBs(item)
         }
     }
