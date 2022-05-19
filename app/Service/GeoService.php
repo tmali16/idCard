@@ -26,7 +26,7 @@ class GeoService
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));
         $bs_name = $request->get('bs_name');
-        if($bs_name){
+        if($bs_name && strlen($bs_name) > 3){
             if(strlen($bs_name) > 3) {
                 $geoQuery = Geo::query()
                     ->where([
@@ -55,11 +55,12 @@ class GeoService
                 ->where([
                     ['mnc', '=', $mnc],
                     ['lac', '=', $lac],
-                    ['ci', 'like', str_replace("*", "%", $ci) . "%"],
-                ]);
+                    ['ci', 'like', $ci . "%"],
+                ])->distinct(['lac', 'ci', 'diapason']);
 
             $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
         }
-        return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'diapason'])->get());
+        dd($geoQuery->get());
+        return GeoResource::collection($geoQuery->get());
     }
 }

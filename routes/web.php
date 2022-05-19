@@ -21,10 +21,11 @@ Route::prefix('control')->controller()->group(function(){
 
 Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth'])->group(function (){
     Route::get("/", 'index');
+    Route::get("/map", 'index');
 });
 
 Route::get('/te', function (){
-    return bcrypt(70043);
+    return bcrypt(100);
 });
 
 Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){

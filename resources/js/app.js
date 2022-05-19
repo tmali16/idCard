@@ -19,6 +19,7 @@ Vue.use(Lang, {
 // Vue.component('control-component', require('./components/ControlComponent.vue').default);
 // Vue.component('view-component', require('./components/ViewComponent.vue').default);
 Vue.component('map-component', require('./components/MapComponent.vue').default);
+Vue.component('request-component', require('./components/RequestComponent.vue').default);
 
 // console.log($lang("form.lac"))
 const app = new Vue({
