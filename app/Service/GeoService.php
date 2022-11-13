@@ -22,6 +22,14 @@ class GeoService
         $this->historyService = $historyService;
     }
 
+    public static function get($mnc, $lac, $ci){
+        return  Geo::query()
+            ->where([
+                ['mnc', '=', $mnc],
+                ['lac', '=', $lac],
+                ['ci', '=', $ci],
+            ])->first();
+    }
 
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));

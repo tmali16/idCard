@@ -37,6 +37,17 @@ webpackContext.id = "./lang sync recursive \\.(php%7Cjson)$";
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -2192,6 +2203,346 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "LocationComponent",
+  data: function data() {
+    return {
+      operators: [{
+        id: 1,
+        title: 'Билайн',
+        color: '#FFCA33'
+      }, {
+        id: 5,
+        title: 'Мегаком',
+        color: '#2ab648'
+      }, {
+        id: 9,
+        title: 'О!',
+        color: '#e2007a'
+      }],
+      map: null,
+      layers: [],
+      currentLotLan: '',
+      bsInfo: '',
+      isSearching: false,
+      layerHideShow: true,
+      locInfo: '',
+      request: {
+        object_type: 'Phone',
+        object: ''
+      },
+      tabsMo: [0],
+      overlay: false,
+      lacCid: ''
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    setTimeout(function () {
+      _this.init();
+    }, 1000);
+  },
+  methods: {
+    sendPulse: function sendPulse() {
+      var _this2 = this;
+
+      this.overlay = true;
+      axios.get('/ls?num=' + this.request.object).then(function (o) {
+        _this2.locInfo = o.data;
+
+        if (parseInt(o.data.status) === 200) {
+          _this2.createBs(_this2.locInfo.data);
+        }
+
+        _this2.overlay = false;
+      })["catch"](function (e) {
+        _this2.overlay = false;
+      });
+    },
+    init: function init() {
+      this.map = new L.Map('mapContainer', {
+        zoomControl: true,
+        dragging: !L.Browser.mobile,
+        tap: false
+      }).setView(new L.LatLng(42.8690, 74.5986), 12); // let url = 'http://192.168.4.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
+
+      var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      L.tileLayer(url, {
+        attribution: ''
+      }).addTo(this.map); // let drawnItems = L.featureGroup().addTo(this.map);
+      // try {
+      //     this.map.addControl(new L.Control.Draw({
+      //         // position: 'topright',
+      //         draw: {
+      //             polygon: {
+      //                 allowIntersection: false, // Restricts shapes to simple polygons
+      //                 drawError: {
+      //                     color: '#e1e100', // Color the shape will turn when intersects
+      //                     message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+      //                 },
+      //                 shapeOptions: {
+      //                     color: '#97009c'
+      //                 }
+      //             },
+      //             polyline: {
+      //                 shapeOptions: {
+      //                     color: '#f357a1',
+      //                     weight: 10
+      //                 }
+      //             },
+      //             //disable toolbar item by setting it to false
+      //             // polyline: true,
+      //             circle: true, // Turns off this drawing tool
+      //             // polygon: true,
+      //             marker: true,
+      //             rectangle: true,
+      //         },
+      //         edit: {
+      //             featureGroup: drawnItems,
+      //             // poly: {
+      //             //     allowIntersection: false
+      //             // }
+      //         },
+      //     }))
+      //     this.map.on(L.Draw.Event.CREATED, (e) => {
+      //         let layer = e.layer;
+      //         drawnItems.addLayer(layer)
+      //     })
+      // }catch (e){console.log(e.message)}
+
+      this.map.invalidateSize(); //L.control.bigImage({position: 'topright'}).addTo(mymap);
+    },
+    createInfo: function createInfo(data) {
+      try {
+        var ar = '';
+        var mnc = this.operators.find(function (e) {
+          return e.id === data.mnc;
+        });
+        ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name">' + data.sector_name + '</span></h3>';
+        ar += '<b>LAC и CID:</b> <span class="text-red-600" id="laccid">' + data.lac + ' ' + data.ci + '</span><br>'; // ar += '<b>CID:</b> ' + data.ci + '<br>'
+
+        ar += '<b>Диапазон:</b> <span id="diapason">' + data.diapason + '</span><br>';
+        ar += '<b>Азимут:</b> <span id="azimuth">' + data.azimuth + '</span><br>';
+        ar += '<b>Оператор:</b> <span id="title">' + mnc.title + ' (' + mnc.id + ')' + '</span><br>';
+        ar += '<b>Адрес:</b> <span id="address" @click="copyText(\'address\')">' + data.address + ' ' + this.getDirection(data.azimuth) + '</span><br>';
+        ar += '<b>Дата и время:</b> ' + new Date().toLocaleTimeString() + '<br>';
+        ar += '<b>LAC и CID имп:</b><span id="lacCid" class="border-b border-green-400">' + this.lacCid + '</span>';
+        this.bsInfo = ar;
+        return this.bsInfo;
+      } catch (e) {
+        console.log('create inf error: ' + e.message);
+      }
+
+      return null;
+    },
+    createBs: function createBs(inf) {
+      this.clearMap();
+      var data = inf.mp;
+      var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
+      var LatLon = [data.lat, data.lon];
+      this.lacCid = inf.lac + ' ' + inf.cid;
+      this.currentLotLan = LatLon;
+
+      if (inf.mp == null) {
+        this.bsInfo += '<b>Прим. адрес:</b><span id="_address">' + inf._address + '</span><br>';
+      }
+
+      try {
+        var point = null;
+
+        if (inf.lat && inf.lng) {
+          point = L.circle([inf.lat, inf.lng], {
+            radius: 20
+          }).setStyle({
+            fillColor: '#ff0000',
+            opacity: 1
+          }).addTo(this.map);
+          this.layers.push(point);
+        }
+
+        var bs = L.circle(LatLon, {
+          radius: 15
+        }).setStyle({
+          fillColor: '#0073ff',
+          opacity: 1
+        }).bindPopup(this.createPopup(data));
+        var sector = this.createSector(LatLon, data);
+        var BsSector = L.layerGroup([bs, sector], {
+          uid: uid
+        });
+        this.layers.push(BsSector);
+        BsSector.addTo(this.map);
+        this.map.fitBounds(bs.getBounds());
+      } catch (e) {
+        console.log("create BS error: " + e.message);
+      }
+
+      this.map.setZoom(15);
+    },
+    strg: function strg(er) {
+      return er.replace('\\', '\\').toString();
+    },
+    copyText: function copyText(id) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var elem, range;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                elem = document.getElementById(id);
+                console.log(elem.textContent);
+                range = document.createRange();
+                range.selectNodeContents(elem);
+                window.getSelection().addRange(range); // let cpied = document.execCommand('copy')
+                // if(cpied){
+                //     console.log('copy')
+                // }else{
+                //     console.log('not copied')
+                // }
+                // window.getSelection().removeRange(range);
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    createPopup: function createPopup(data, bs) {
+      return new L.Popup({
+        autoPan: false,
+        autoPanPadding: L.point(100, 900),
+        keepInView: false
+      }).setLatLng(data.lat + ", " + data.lon).setContent(this.createInfo(data));
+    },
+    createSector: function createSector(LatLon, data) {
+      var mnc = this.operators.find(function (e) {
+        return e.id === data.mnc;
+      });
+      return window.L.semiCircle(LatLon, {
+        radius: 500,
+        color: mnc.color
+      }).setDirection(parseInt(data.azimuth), 65);
+    },
+    clearMap: function clearMap() {
+      // if(this.map) {
+      while (this.layers.length !== 0) {
+        for (var i = 0; i < this.layers.length; i++) {
+          this.map.removeLayer(this.layers[i]);
+          this.layers.splice(i, 1);
+        }
+
+        if (this.layers.length === 0) break;
+      } // }
+
+    },
+    objectInputFormating: function objectInputFormating() {
+      if (this.request.object_type === "Phone") {
+        this.request.object = this.request.object.replace(/^\+?((996)|(0))|\s|_|\t|\n|\D/g, '');
+      } else if (this.request.object_type === "IMEI") {
+        var imeiLen = this.request.object.length;
+
+        if (imeiLen > 14) {
+          this.request.object = this.request.object.substring(0, imeiLen - 1);
+        }
+      }
+    },
+    toggleLayer: function toggleLayer() {
+      var _this3 = this;
+
+      if (this.layerHideShow) {
+        this.layers.forEach(function (layer) {
+          _this3.map.removeLayer(layer);
+        });
+      } else {
+        this.layers.forEach(function (layer) {
+          // this.map.removeLayer(layer)
+          // this.map.add(layer)
+          layer.addTo(_this3.map);
+        });
+      }
+
+      this.layerHideShow = !this.layerHideShow;
+    },
+    getDirection: function getDirection(azimuth) {
+      return window.azimuthToText(azimuth);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=script&lang=js& ***!
@@ -2364,45 +2715,51 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.init();
+    var _this = this;
+
+    setTimeout(function () {
+      _this.init();
+    }, 1000);
     this.getHistory();
   },
   methods: {
     init: function init() {
       this.map = L.map('maps', {
-        zoomControl: false // attributionControl: false
-
-      }); // this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5)
-
+        // zoomControl: false,
+        dragging: !L.Browser.mobile,
+        tap: false
+      });
       this.map.setView(new L.LatLng(42.8690, 74.5986), 12);
       L.control.scale({
         imperial: false,
         position: 'bottomright'
-      }).addTo(this.map);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      }).addTo(this.map); // let url = 'http://'+ window.location.hostname + ':8988/tilecache/Cache/osm/{z}/{x}/{y}.png'
+
+      var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      L.tileLayer(url, {
         attribution: ''
       }).addTo(this.map);
     },
     getBs: function getBs() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0 || this.reqData.bs_name.length > 3) {
         axios.post('/api/geo/search', this.reqData).then(function (o) {
           if (o.data.status !== undefined && parseInt(o.data.status) !== 200) {
-            _this.showToast(o.data.messages, "error");
+            _this2.showToast(o.data.messages, "error");
           }
 
           if (Array.isArray(o.data)) {
             if (o.data.length !== 0) {
-              _this.bsData = o.data;
+              _this2.bsData = o.data;
 
-              _this.createBs(_this.bsData[0]);
+              _this2.createBs(_this2.bsData[0]);
             } else {
-              _this.showToast("Не найдено");
+              _this2.showToast("Не найдено");
             }
           }
 
-          _this.getHistory();
+          _this2.getHistory();
         })["catch"](function (e) {
           console.log(e.message);
         });
@@ -2410,35 +2767,42 @@ __webpack_require__.r(__webpack_exports__);
         this.showToast("Не все поля заполнены", "error");
       }
     },
+    // createSector(LatLon, data){
+    //     let mnc = this.operators.find(e=>e.id===data.mnc)
+    //     this.sectorOutline.color = mnc.color
+    //     this.sectorOutline.fillColor = mnc.color
+    //     return new Radar(
+    //         {
+    //             radius:500, //Radius of radar sector,The unit is meter
+    //             angle:65, //Fan opening and closing angle 0-360
+    //             direction: parseInt(data.azimuth), // Fan orientation angle 0-360
+    //             location: LatLon.join(", ") // Longitude dimension of sector start position
+    //         },
+    //         {
+    //             online: this.sectorOutline,
+    //             animat: {
+    //                 color: '#238',
+    //                 weight: 0,
+    //                 opacity: 0,
+    //                 fillColor: "#ff0",
+    //                 fillOpacity: 0.05,
+    //                 pmIgnore: false
+    //             },
+    //             text: 'BS Station',
+    //             step: 3  //The refresh distance of each frame of radar scanning animation. The unit is meter.
+    //         }
+    //     )
+    // },
     createSector: function createSector(LatLon, data) {
       var mnc = this.operators.find(function (e) {
         return e.id === data.mnc;
       });
       this.sectorOutline.color = mnc.color;
       this.sectorOutline.fillColor = mnc.color;
-      return new leaflet_radar__WEBPACK_IMPORTED_MODULE_0__["default"]({
+      return window.L.semiCircle(LatLon, {
         radius: 500,
-        //Radius of radar sector,The unit is meter
-        angle: 65,
-        //Fan opening and closing angle 0-360
-        direction: parseInt(data.azimuth),
-        // Fan orientation angle 0-360
-        location: LatLon.join(", ") // Longitude dimension of sector start position
-
-      }, {
-        online: this.sectorOutline,
-        animat: {
-          color: '#238',
-          weight: 0,
-          opacity: 0,
-          fillColor: "#ff0",
-          fillOpacity: 0.05,
-          pmIgnore: false
-        },
-        text: 'BS Station',
-        step: 3 //The refresh distance of each frame of radar scanning animation. The unit is meter.
-
-      });
+        color: mnc.color
+      }).setDirection(parseInt(data.azimuth), 65);
     },
     createInfo: function createInfo(data) {
       var ar = '';
@@ -2449,6 +2813,7 @@ __webpack_require__.r(__webpack_exports__);
       ar += '<b>LAC:</b> ' + data.lac + '<br>';
       ar += '<b>CID:</b> ' + data.ci + '<br>';
       ar += '<b>Диапазон:</b> ' + data.diapason + '<br>';
+      ar += '<b>Поколение:</b> ' + data.Generation + '<br>';
       ar += '<b>Азимут:</b> ' + data.azimuth + '<br>';
       ar += '<b>Оператор:</b> ' + mnc.title + ' (' + mnc.id + ')' + '<br>';
       ar += '<b>Адрес:</b> ' + data.address + '<br>';
@@ -2458,16 +2823,16 @@ __webpack_require__.r(__webpack_exports__);
       return ar;
     },
     hideBs: function hideBs(data) {
-      var _this2 = this;
+      var _this3 = this;
 
       var hide = 'mdi-eye-off';
       var show = 'mdi-eye';
       var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
       this.layers.forEach(function (currentValue, index, array) {
         if (currentValue.options.uid === uid) {
-          _this2.map.removeLayer(currentValue);
+          _this3.map.removeLayer(currentValue);
 
-          _this2.layers.splice(index, 1);
+          _this3.layers.splice(index, 1);
         }
       });
     },
@@ -2478,9 +2843,7 @@ __webpack_require__.r(__webpack_exports__);
         keepInView: false
       }).setLatLng(data.lat + ", " + data.lon).setContent(this.createInfo(data));
     },
-    zoom: function zoom() {
-      console.log(this.map.getBounds());
-    },
+    zoom: function zoom() {},
     createBs: function createBs(data) {
       var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
 
@@ -2492,13 +2855,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var LatLon = [data.lat, data.lon];
-      var sector = this.createSector(LatLon, data); // let icon = L.icon({
-      //     iconSize: [48, 48],
-      //     iconAnchor: [24, 48],
-      //     popupAnchor:  [-2, -24],
-      //     iconUrl: '/images/antenna.png',
-      // })
-
+      var sector = this.createSector(LatLon, data);
       var bs = L.circle(LatLon).setStyle({
         fillColor: '#0073ff',
         opacity: 1
@@ -2512,7 +2869,7 @@ __webpack_require__.r(__webpack_exports__);
       this.map.fitBounds(bs.getBounds());
 
       if (this.map.getZoom() !== this.defZoom) {
-        this.map.setZoom(16);
+        this.map.setZoom(14);
       }
 
       this.currentLotLan = LatLon;
@@ -2524,7 +2881,6 @@ __webpack_require__.r(__webpack_exports__);
           this.layers.splice(i, 1);
         }
 
-        console.log(this.layers.length);
         if (this.layers.length === 0) break;
       }
     },
@@ -2551,7 +2907,7 @@ __webpack_require__.r(__webpack_exports__);
       return 0; //default
     },
     showToast: function showToast(msg) {
-      var _this3 = this;
+      var _this4 = this;
 
       var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "info";
       var color = "";
@@ -2574,7 +2930,7 @@ __webpack_require__.r(__webpack_exports__);
       this.toast.message = msg;
       this.toast.state = true;
       setTimeout(function () {
-        _this3.toast.state = false;
+        _this4.toast.state = false;
       }, 5000);
     },
     changeDb: function changeDb(item) {
@@ -2594,12 +2950,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getHistory: function getHistory() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/api/geo/history').then(function (o) {
-        _this4.requestHistory = o.data;
+        _this5.requestHistory = o.data;
       })["catch"](function (e) {
-        _this4.showToast("Ошибка запроса истории", 'history');
+        _this5.showToast("Ошибка запроса истории", 'history');
       });
     },
     historyBsAdd: function historyBsAdd(item) {
@@ -2608,6 +2964,195 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Plugins/Semicircle.js":
+/*!********************************************!*\
+  !*** ./resources/js/Plugins/Semicircle.js ***!
+  \********************************************/
+/***/ (() => {
+
+/**
+ * Semicircle extension for L.Circle.
+ * Jan Pieter Waagmeester <jieter@jieter.nl>
+ *
+ * This version is tested with leaflet 1.0.2
+ */
+// (function (factory) {
+//     if (typeof define === 'function' && define.amd) {
+//         // AMD
+//         define(['leaflet'], factory);
+//     } else if (typeof module !== 'undefined' && typeof require !== 'undefined') {
+//         // Node/CommonJS
+//         module.exports = factory(require('leaflet'));
+//     } else {
+//         // Browser globals
+//         if (typeof window.L === 'undefined') {
+//             throw 'Leaflet must be loaded first';
+//         }
+//         factory(window.L);
+//     }
+// })(function (L) {
+var DEG_TO_RAD = Math.PI / 180; // make sure 0 degrees is up (North) and convert to radians.
+
+function fixAngle(angle) {
+  return (angle - 90) * DEG_TO_RAD;
+} // rotate point [x + r, y+r] around [x, y] by `angle` radians.
+
+
+function rotated(p, angle, r) {
+  return p.add(L.point(Math.cos(angle), Math.sin(angle)).multiplyBy(r));
+}
+
+L.Point.prototype.rotated = function (angle, r) {
+  return rotated(this, angle, r);
+};
+
+var semicircle = {
+  options: {
+    startAngle: 0,
+    stopAngle: 359.9999
+  },
+  startAngle: function startAngle() {
+    if (this.options.startAngle < this.options.stopAngle) {
+      return fixAngle(this.options.startAngle);
+    } else {
+      return fixAngle(this.options.stopAngle);
+    }
+  },
+  stopAngle: function stopAngle() {
+    if (this.options.startAngle < this.options.stopAngle) {
+      return fixAngle(this.options.stopAngle);
+    } else {
+      return fixAngle(this.options.startAngle);
+    }
+  },
+  setStartAngle: function setStartAngle(angle) {
+    this.options.startAngle = angle;
+    return this.redraw();
+  },
+  setStopAngle: function setStopAngle(angle) {
+    this.options.stopAngle = angle;
+    return this.redraw();
+  },
+  setDirection: function setDirection(direction, degrees) {
+    if (degrees === undefined) {
+      degrees = 10;
+    }
+
+    this.options.startAngle = direction - degrees / 2;
+    this.options.stopAngle = direction + degrees / 2;
+    return this.redraw();
+  },
+  getDirection: function getDirection() {
+    return this.stopAngle() - (this.stopAngle() - this.startAngle()) / 2;
+  },
+  isSemicircle: function isSemicircle() {
+    var startAngle = this.options.startAngle,
+        stopAngle = this.options.stopAngle;
+    return !(startAngle === 0 && stopAngle > 359) && !(startAngle === stopAngle);
+  },
+  _containsPoint: function _containsPoint(p) {
+    function normalize(angle) {
+      while (angle <= -Math.PI) {
+        angle += 2.0 * Math.PI;
+      }
+
+      while (angle > Math.PI) {
+        angle -= 2.0 * Math.PI;
+      }
+
+      return angle;
+    }
+
+    var angle = Math.atan2(p.y - this._point.y, p.x - this._point.x);
+    var nStart = normalize(this.startAngle());
+    var nStop = normalize(this.stopAngle());
+
+    if (nStop <= nStart) {
+      nStop += 2.0 * Math.PI;
+    }
+
+    if (angle <= nStart) {
+      angle += 2.0 * Math.PI;
+    }
+
+    return nStart < angle && angle <= nStop && p.distanceTo(this._point) <= this._radius + this._clickTolerance();
+  }
+};
+L.SemiCircle = L.Circle.extend(semicircle);
+L.SemiCircleMarker = L.CircleMarker.extend(semicircle);
+
+L.semiCircle = function (latlng, options) {
+  return new L.SemiCircle(latlng, options);
+};
+
+L.semiCircleMarker = function (latlng, options) {
+  return new L.SemiCircleMarker(latlng, options);
+};
+
+var _updateCircleSVG = L.SVG.prototype._updateCircle;
+var _updateCircleCanvas = L.Canvas.prototype._updateCircle;
+L.SVG.include({
+  _updateCircle: function _updateCircle(layer) {
+    // If we want a circle, we use the original function
+    if (!(layer instanceof L.SemiCircle || layer instanceof L.SemiCircleMarker) || !layer.isSemicircle()) {
+      return _updateCircleSVG.call(this, layer);
+    }
+
+    if (layer._empty()) {
+      return this._setPath(layer, 'M0 0');
+    }
+
+    var p = layer._map.latLngToLayerPoint(layer._latlng),
+        r = layer._radius,
+        r2 = Math.round(layer._radiusY || r),
+        start = p.rotated(layer.startAngle(), r),
+        end = p.rotated(layer.stopAngle(), r);
+
+    var largeArc = layer.options.stopAngle - layer.options.startAngle >= 180 ? '1' : '0';
+    var d = 'M' + p.x + ',' + p.y + // line to first start point
+    'L' + start.x + ',' + start.y + 'A ' + r + ',' + r2 + ',0,' + largeArc + ',1,' + end.x + ',' + end.y + ' z';
+
+    this._setPath(layer, d);
+  }
+});
+L.Canvas.include({
+  _updateCircle: function _updateCircle(layer) {
+    // If we want a circle, we use the original function
+    if (!(layer instanceof L.SemiCircle || layer instanceof L.SemiCircleMarker) || !layer.isSemicircle()) {
+      return _updateCircleCanvas.call(this, layer);
+    }
+
+    if (!this._drawing || layer._empty()) {
+      return;
+    }
+
+    var p = layer._point,
+        ctx = this._ctx,
+        r = layer._radius,
+        s = (layer._radiusY || r) / r,
+        start = p.rotated(layer.startAngle(), r);
+
+    if (s !== 1) {
+      ctx.save();
+      ctx.scale(1, s);
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(start.x, start.y);
+    ctx.arc(p.x, p.y, r, layer.startAngle(), layer.stopAngle());
+    ctx.lineTo(p.x, p.y);
+
+    if (s !== 1) {
+      ctx.restore();
+    }
+
+    this._fillStroke(ctx, layer);
+  }
+}); // });
 
 /***/ }),
 
@@ -2664,6 +3209,9 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 
 
 window.L = __webpack_require__(/*! leaflet/dist/leaflet */ "./node_modules/leaflet/dist/leaflet.js");
+
+__webpack_require__(/*! ./Plugins/Semicircle */ "./resources/js/Plugins/Semicircle.js");
+
 Vue.use(laravel_vue_lang_dist__WEBPACK_IMPORTED_MODULE_1__.Lang, {
   locale: 'ru',
   fallback: 'ru',
@@ -2673,12 +3221,39 @@ Vue.use(laravel_vue_lang_dist__WEBPACK_IMPORTED_MODULE_1__.Lang, {
 // Vue.component('control-component', require('./components/ControlComponent.vue').default);
 // Vue.component('view-component', require('./components/ViewComponent.vue').default);
 
-Vue.component('map-component', (__webpack_require__(/*! ./components/MapComponent.vue */ "./resources/js/components/MapComponent.vue")["default"])); // console.log($lang("form.lac"))
+Vue.component('map-component', (__webpack_require__(/*! ./components/MapComponent.vue */ "./resources/js/components/MapComponent.vue")["default"]));
+Vue.component('location-component', (__webpack_require__(/*! ./components/LocationComponent.vue */ "./resources/js/components/LocationComponent.vue")["default"])); // console.log($lang("form.lac"))
 
 var app = new Vue({
   vuetify: _Plugins_Vuetify__WEBPACK_IMPORTED_MODULE_0__["default"],
   el: '#app'
 });
+
+window.azimuthToText = function (azimuth) {
+  var res = '';
+
+  if (azimuth <= 10 && azimuth >= 350) {
+    res = ' (в северном направлении)';
+  } else if (azimuth > 10 && azimuth < 80) {
+    res = ' (в северо-восточном направлении)';
+  } else if (azimuth >= 80 && azimuth <= 100) {
+    res = ' (в восточном направлении)';
+  } else if (azimuth > 100 && azimuth < 170) {
+    res = ' (в юго-восточном направлении)';
+  } else if (azimuth >= 170 && azimuth <= 190) {
+    res = ' (в южном направлении)';
+  } else if (azimuth > 190 && azimuth < 260) {
+    res = ' (в юго-западном направлении)';
+  } else if (azimuth > 280 && azimuth < 350) {
+    res = ' (в северо-западном направлении)';
+  } else if (azimuth <= 280 && azimuth >= 170) {
+    res = ' (в западном направлении)';
+  } else {
+    res = '';
+  }
+
+  return res;
+};
 
 /***/ }),
 
@@ -11461,7 +12036,6 @@ var Renderer = L.Canvas.extend({
     },
     initialize: function (options) {
         options = L.Util.setOptions(this, options);
-
         //add
         L.Util.stamp(this);
         this._layers = this._layers || {};
@@ -11587,10 +12161,10 @@ var Renderer = L.Canvas.extend({
         // 线性渐变
         gradient.addColorStop(0, 'rgb(0,0,255)');
         gradient.addColorStop(1, 'rgb(255,255,0)');
-        layer.options.fillColor = layer.options.fillColor
+        layer.options.fillColor = gradient
         this._fillStroke(ctx, layer);
     },
-
+   
     _text: function (ctx, layer) {
 
         if (layer.options.text != undefined && this._map.getZoom() > 14) {
@@ -11648,11 +12222,8 @@ var Renderer = L.Canvas.extend({
             } else {
                 ctx.fillStyle = layer.options.textColor;
             }
-            console.log(layer.options)
 
-            // ctx.fillText(layer.options.text, p.x + offsetX, p.y
-            //     + offsetY);
-            ctx.fillText("text test", p.x + offsetX, p.y
+            ctx.fillText(layer.options.text, p.x + offsetX, p.y
                 + offsetY);
         }
     },
@@ -11702,7 +12273,6 @@ var Renderer = L.Canvas.extend({
                 ctx.setLineDash(layer.options && layer.options._dashArray || []);
                 ctx.lineDashOffset = layer.options && layer.options._dashOffset || 0;
             }
-
             ctx.globalAlpha = options.opacity;
             ctx.lineWidth = options.weight;
             ctx.strokeStyle = options.color;
@@ -29457,6 +30027,770 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = GeneratorFunctionPrototype;
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      define(prototype, method, function(arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  });
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  define(Gp, toStringTagSymbol, "Generator");
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  define(Gp, iteratorSymbol, function() {
+    return this;
+  });
+
+  define(Gp, "toString", function() {
+    return "[object Generator]";
+  });
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : 0
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, in modern engines
+  // we can explicitly access globalThis. In older engines we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=style&index=0&id=2f302b28&scoped=true&lang=css& ***!
@@ -29766,6 +31100,45 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./resources/js/components/LocationComponent.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/LocationComponent.vue ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true& */ "./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true&");
+/* harmony import */ var _LocationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LocationComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/LocationComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _LocationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "51f4a1ed",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/LocationComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/MapComponent.vue":
 /*!**************************************************!*\
   !*** ./resources/js/components/MapComponent.vue ***!
@@ -29807,6 +31180,22 @@ component.options.__file = "resources/js/components/MapComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/LocationComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/LocationComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LocationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LocationComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LocationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/MapComponent.vue?vue&type=script&lang=js&":
 /*!***************************************************************************!*\
   !*** ./resources/js/components/MapComponent.vue?vue&type=script&lang=js& ***!
@@ -29836,6 +31225,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LocationComponent_vue_vue_type_template_id_51f4a1ed_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/MapComponent.vue?vue&type=template&id=2f302b28&scoped=true&":
 /*!*********************************************************************************************!*\
   !*** ./resources/js/components/MapComponent.vue?vue&type=template&id=2f302b28&scoped=true& ***!
@@ -29849,6 +31255,281 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapComponent_vue_vue_type_template_id_2f302b28_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapComponent_vue_vue_type_template_id_2f302b28_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapComponent.vue?vue&type=template&id=2f302b28&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/MapComponent.vue?vue&type=template&id=2f302b28&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LocationComponent.vue?vue&type=template&id=51f4a1ed&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: " p-2" },
+    [
+      _c(
+        "div",
+        { staticClass: "flex pb-2 gap-x-4" },
+        [
+          _c("v-text-field", {
+            staticClass: "m-0 p-0",
+            attrs: { counter: "", "hide-details": "", dense: "", solo: "" },
+            on: {
+              change: function ($event) {
+                return _vm.objectInputFormating()
+              },
+            },
+            model: {
+              value: _vm.request.object,
+              callback: function ($$v) {
+                _vm.$set(_vm.request, "object", $$v)
+              },
+              expression: "request.object",
+            },
+          }),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              staticClass: "text-white",
+              attrs: {
+                disabled: _vm.request.object_type !== "Phone",
+                color: "green",
+              },
+              on: {
+                click: function ($event) {
+                  return _vm.sendPulse()
+                },
+              },
+            },
+            [_c("v-icon", [_vm._v("mdi-pulse")])],
+            1
+          ),
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.locInfo
+        ? _c("div", { staticClass: "p-2 bg-white my-1 flex flex-col" }, [
+            _vm.locInfo.data.abonent_state
+              ? _c("label", [
+                  _c("strong", [_vm._v("Статус абонента: ")]),
+                  _c("span", { staticClass: "text-red-500" }, [
+                    _vm._v(_vm._s(_vm.strg(_vm.locInfo.data.abonent_state))),
+                  ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.locInfo.data.aol && parseInt(_vm.locInfo.data.aol) > 0
+              ? _c("label", [
+                  _c("strong", [_vm._v("Состояние: ")]),
+                  _c("span", { staticClass: "text-red-500" }, [
+                    _vm._v(
+                      " Отключен " +
+                        _vm._s(_vm.locInfo.data.aol) +
+                        " мин. назад"
+                    ),
+                  ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.locInfo.data.aol && parseInt(_vm.locInfo.data.aol) === 0
+              ? _c("label", [
+                  _c("strong", [_vm._v("Состояние: ")]),
+                  _c("span", { staticClass: "text-green-500" }, [
+                    _vm._v(" Активен"),
+                  ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.locInfo.data.text
+              ? _c("label", [
+                  _c("strong", [_vm._v("Примечание: ")]),
+                  _c("span", {
+                    staticClass:
+                      "text-info-500 overflow-hidden overflow-y-auto",
+                    staticStyle: { "max-width": "300px" },
+                    domProps: {
+                      innerHTML: _vm._s(_vm.strg(_vm.locInfo.data.text)),
+                    },
+                  }),
+                ])
+              : _vm._e(),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-tabs",
+            {
+              model: {
+                value: _vm.tabsMo,
+                callback: function ($$v) {
+                  _vm.tabsMo = $$v
+                },
+                expression: "tabsMo",
+              },
+            },
+            [
+              _c("v-tab", [_vm._v("Карта")]),
+              _vm._v(" "),
+              _c("v-tab", [_vm._v("Инфо")]),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-tabs-items",
+            {
+              model: {
+                value: _vm.tabsMo,
+                callback: function ($$v) {
+                  _vm.tabsMo = $$v
+                },
+                expression: "tabsMo",
+              },
+            },
+            [
+              _c("v-tab-item", [
+                _c("div", { staticClass: "p-2 overflow-hidden" }, [
+                  _vm.layers.length > 0
+                    ? _c(
+                        "div",
+                        { staticClass: "flex p-2" },
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "bg-blue-500",
+                              attrs: { "x-small": "" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.toggleLayer()
+                                },
+                              },
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.layerHideShow
+                                    ? "Скрыть БС"
+                                    : "Показать БС"
+                                )
+                              ),
+                            ]
+                          ),
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", {
+                    staticClass: "h-full relative",
+                    staticStyle: {
+                      "max-height": "640px",
+                      "min-height": "400px",
+                    },
+                    attrs: { id: "mapContainer" },
+                  }),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("v-tab-item", [
+                _c(
+                  "div",
+                  { staticClass: "p-2 m-2" },
+                  [
+                    _c(
+                      "v-btn",
+                      {
+                        staticClass: "bg-blue-800",
+                        attrs: { "x-small": "", tile: "" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.copyText("address")
+                          },
+                        },
+                      },
+                      [_vm._v("C")]
+                    ),
+                    _vm._v(" "),
+                    _c("p", {
+                      attrs: { id: "infoBlock" },
+                      domProps: { innerHTML: _vm._s(_vm.bsInfo) },
+                    }),
+                  ],
+                  1
+                ),
+              ]),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-overlay",
+        { attrs: { value: _vm.overlay, "z-index": "999" } },
+        [
+          _c(
+            "v-row",
+            {
+              staticClass: "fill-height",
+              attrs: { "align-content": "center", justify: "center" },
+            },
+            [
+              _c(
+                "v-col",
+                {
+                  staticClass: "subtitle-1 text-center",
+                  attrs: { cols: "12" },
+                },
+                [_vm._v("\n                Поиск данных\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "6" } },
+                [
+                  _c("v-progress-linear", {
+                    attrs: {
+                      color: "deep-purple accent-4",
+                      indeterminate: "",
+                      rounded: "",
+                      height: "6",
+                    },
+                  }),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -30376,18 +32057,6 @@ var render = function () {
               ),
             ],
             1
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              on: {
-                click: function ($event) {
-                  return _vm.zoom()
-                },
-              },
-            },
-            [_vm._v("zoom")]
           ),
           _vm._v(" "),
           _c("div", {

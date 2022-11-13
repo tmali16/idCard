@@ -19,6 +19,7 @@ class GeoResource extends JsonResource
             'lat'=>$this->site_lat,
             'lon'=>$this->site_lon,
             'diapason'=>$this->diapason,
+            'Generation'=>$this->g,
             'azimuth'=>$this->azimuth,
             'lac'=>$this->lac,
             'ci'=>$this->ci,

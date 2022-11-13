@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 require('laravel-vue-lang/mix');
+const path =require('path')
 
 /*
  |--------------------------------------------------------------------------
@@ -12,7 +13,7 @@ require('laravel-vue-lang/mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').lang()
+mix.js('resources/js/app.js', 'public/js')
     .vue()
     .sass("resources/sass/style.scss", "public/css")
     .postCss('resources/css/app.css', 'public/css', [
@@ -20,3 +21,20 @@ mix.js('resources/js/app.js', 'public/js').lang()
         require('tailwindcss'),
         require('autoprefixer'),
     ]).disableNotifications();
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@lang': path.resolve('./lang'),
+        },
+    },
+    module: {
+        rules: [
+            {
+                test: /[\\\/]lang.+\.(php)$/,
+                loader: 'php-array-loader',
+            },
+        ],
+    },
+})
+    .disableNotifications();

@@ -89,7 +89,7 @@
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
-        <button @click="zoom();">zoom</button>
+
         <div class="w-full p-4 my-2 border overflow-hidden auto-height-map" id="maps" style=""></div>
     </v-card>
     <v-snackbar v-model="toast.state" :color="toast.type" top>
@@ -147,23 +147,26 @@ export default {
         }
     },
     mounted(){
-        this.init();
+        setTimeout(()=>{
+            this.init();
+        }, 1000)
         this.getHistory();
     },
     methods:{
         init(){
             this.map = L.map('maps', {
-                zoomControl: false
-                // attributionControl: false
-
+                // zoomControl: false,
+                dragging: !L.Browser.mobile,
+                tap: false,
             })
-            // this.map.setView(new L.LatLng(41.96766, 74.718018), 7.5)
             this.map.setView(new L.LatLng(42.8690, 74.5986), 12)
             L.control.scale({
                 imperial: false,
                 position: 'bottomright'
             }).addTo(this.map);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // let url = 'http://'+ window.location.hostname + ':8988/tilecache/Cache/osm/{z}/{x}/{y}.png'
+            let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            L.tileLayer(url, {
                 attribution: ''
             }).addTo(this.map);
         },
@@ -189,31 +192,40 @@ export default {
                 this.showToast("Не все поля заполнены", "error")
             }
         },
+        // createSector(LatLon, data){
+        //     let mnc = this.operators.find(e=>e.id===data.mnc)
+        //     this.sectorOutline.color = mnc.color
+        //     this.sectorOutline.fillColor = mnc.color
+        //     return new Radar(
+        //         {
+        //             radius:500, //Radius of radar sector,The unit is meter
+        //             angle:65, //Fan opening and closing angle 0-360
+        //             direction: parseInt(data.azimuth), // Fan orientation angle 0-360
+        //             location: LatLon.join(", ") // Longitude dimension of sector start position
+        //         },
+        //         {
+        //             online: this.sectorOutline,
+        //             animat: {
+        //                 color: '#238',
+        //                 weight: 0,
+        //                 opacity: 0,
+        //                 fillColor: "#ff0",
+        //                 fillOpacity: 0.05,
+        //                 pmIgnore: false
+        //             },
+        //             text: 'BS Station',
+        //             step: 3  //The refresh distance of each frame of radar scanning animation. The unit is meter.
+        //         }
+        //     )
+        // },
         createSector(LatLon, data){
             let mnc = this.operators.find(e=>e.id===data.mnc)
             this.sectorOutline.color = mnc.color
             this.sectorOutline.fillColor = mnc.color
-            return new Radar(
-                {
-                    radius:500, //Radius of radar sector,The unit is meter
-                    angle:65, //Fan opening and closing angle 0-360
-                    direction: parseInt(data.azimuth), // Fan orientation angle 0-360
-                    location: LatLon.join(", ") // Longitude dimension of sector start position
-                },
-                {
-                    online: this.sectorOutline,
-                    animat: {
-                        color: '#238',
-                        weight: 0,
-                        opacity: 0,
-                        fillColor: "#ff0",
-                        fillOpacity: 0.05,
-                        pmIgnore: false
-                    },
-                    text: 'BS Station',
-                    step: 3  //The refresh distance of each frame of radar scanning animation. The unit is meter.
-                }
-            )
+            return window.L.semiCircle(LatLon, {
+                radius: 500,
+                color: mnc.color
+            }).setDirection(parseInt(data.azimuth), 65)
         },
         createInfo(data){
             let ar = '';
@@ -222,6 +234,7 @@ export default {
             ar += '<b>LAC:</b> ' + data.lac + '<br>'
             ar += '<b>CID:</b> ' + data.ci + '<br>'
             ar += '<b>Диапазон:</b> ' + data.diapason + '<br>'
+            ar += '<b>Поколение:</b> ' + data.Generation + '<br>'
             ar += '<b>Азимут:</b> ' + data.azimuth + '<br>'
             ar += '<b>Оператор:</b> ' + mnc.title + ' ('+mnc.id+')'+ '<br>'
             ar += '<b>Адрес:</b> ' + data.address + '<br>';
@@ -251,7 +264,6 @@ export default {
             .setContent(this.createInfo(data))
         },
         zoom(){
-            console.log(this.map.getBounds())
         },
         createBs(data){
             let uid = data.lac+'_'+data.ci+'_'+data.azimuth
@@ -263,14 +275,9 @@ export default {
             }
             let LatLon = [data.lat, data.lon]
             let sector = this.createSector(LatLon,  data)
-            // let icon = L.icon({
-            //     iconSize: [48, 48],
-            //     iconAnchor: [24, 48],
-            //     popupAnchor:  [-2, -24],
-            //     iconUrl: '/images/antenna.png',
-            // })
             let bs = L.circle(LatLon)
-                .setStyle({fillColor: '#0073ff', opacity: 1,}).bindPopup(this.createPopup(data))
+                .setStyle({fillColor: '#0073ff', opacity: 1,})
+                .bindPopup(this.createPopup(data))
                 .openPopup()
                 // .bindTooltip(this.createInfo(data), {permanent: false, }).openTooltip()
             let BsSector = L.layerGroup([bs,sector],{uid: uid})
@@ -278,7 +285,7 @@ export default {
             BsSector.addTo(this.map)
             this.map.fitBounds(bs.getBounds())
             if(this.map.getZoom() !== this.defZoom) {
-                this.map.setZoom(16)
+                this.map.setZoom(14)
             }
             this.currentLotLan = LatLon
         },
@@ -288,7 +295,6 @@ export default {
                     this.map.removeLayer(this.layers[i])
                     this.layers.splice(i, 1)
                 }
-                console.log(this.layers.length)
                 if(this.layers.length === 0)
                     break;
             }
