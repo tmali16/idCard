@@ -146,16 +146,21 @@ export default {
         createInfo(data){
             try{
                 let ar = '';
-                let mnc = this.operators.find(e=>e.id===data.mnc)
-                ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name">' + data.sector_name + '</span></h3>'
-                ar += '<b>LAC и CID:</b> <span class="text-red-600" id="laccid">' + data.lac +' '+data.ci+ '</span><br>'
-                // ar += '<b>CID:</b> ' + data.ci + '<br>'
-                ar += '<b>Диапазон:</b> <span id="diapason">' + data.diapason + '</span><br>'
-                ar += '<b>Азимут:</b> <span id="azimuth">' + data.azimuth + '</span><br>'
-                ar += '<b>Оператор:</b> <span id="title">' + mnc.title + ' ('+mnc.id+')'+ '</span><br>'
-                ar += '<b>Адрес:</b> <span id="address" @click="copyText(\'address\')">' + data.address +' '+this.getDirection(data.azimuth) +'</span><br>'
-                ar += '<b>Дата и время:</b> '+(new Date()).toLocaleTimeString()+'<br>'
-                ar += '<b>LAC и CID имп:</b><span id="lacCid" class="border-b border-green-400">'+this.lacCid +'</span>';
+                if(this.locInfo.data.mp !== null) {
+                    let mnc = this.operators.find(e => e.id === data.mnc)
+                    ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name">' + data.sector_name + '</span></h3>'
+                    ar += '<b>LAC и CID:</b> <span class="text-red-600" id="laccid">' + data.lac + ' ' + data.ci + '</span><br>'
+                    // ar += '<b>CID:</b> ' + data.ci + '<br>'
+                    ar += '<b>Диапазон:</b> <span id="diapason">' + data.diapason + '</span><br>'
+                    ar += '<b>Азимут:</b> <span id="azimuth">' + data.azimuth + '</span><br>'
+                    ar += '<b>Оператор:</b> <span id="title">' + mnc.title + ' (' + mnc.id + ')' + '</span><br>'
+                    ar += '<b>Адрес:</b> <span id="address" @click="copyText(\'address\')">' + data.address + ' ' + this.getDirection(data.azimuth) + '</span><br>'
+                    ar += '<b>Дата и время:</b> ' + (new Date()).toLocaleTimeString() + '<br>'
+                }else{
+                    ar += '<b>Прим. адрес:</b><span id="_address">' + inf._address + '</span><br>';
+                    ar += '<b>LAC и CID имп:</b><span id="lacCid" class="border-b border-green-400">' + this.lacCid + '</span>';
+                    ar += '<b>Дата и время:</b> ' + (new Date()).toLocaleTimeString() + '<br>'
+                }
                 this.bsInfo = ar;
             return this.bsInfo
             }catch (e){console.log('create inf error: '+e.message)}
@@ -168,9 +173,6 @@ export default {
             let LatLon = [data.lat, data.lon]
             this.lacCid = inf.lac + ' ' + inf.cid
             this.currentLotLan = LatLon
-            if(inf.mp == null) {
-                this.bsInfo += '<b>Прим. адрес:</b><span id="_address">' + inf._address + '</span><br>';
-            }
             try {
                 let point = null;
                 if(inf.lat && inf.lng){

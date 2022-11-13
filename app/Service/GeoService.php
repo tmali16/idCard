@@ -50,7 +50,6 @@ class GeoService
             $mnc = $request->get('mnc');
             $lacCi = $request->get('LacCid');
             preg_match('/(\d+)\s+(\d+)/', $lacCi, $o);
-//        dd($o);
             if (count($o) !== 3 || !$mnc) {
                 return response()->json([
                     'status' => 500,
@@ -65,7 +64,6 @@ class GeoService
                     ['lac', '=', $lac],
                     ['ci', 'like', str_replace("*", "%", $ci) . "%"],
                 ]);
-
             $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
         }
         return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'diapason'])->get());

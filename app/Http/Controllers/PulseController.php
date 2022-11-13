@@ -8,7 +8,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TerminalLocationResource;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use voku\helper\UTF8;
 
 class PulseController extends Controller
 {
@@ -19,7 +18,7 @@ class PulseController extends Controller
     {
         $this->middleware('auth');
         if(auth()->check() && auth()->user()->username !== 'admin'){
-            abort(404, 'NOT_FOUND');
+            abort(404, '_NOT_FOUND');
         }else{
             $this->url = env('TERMINAL_API_URL');
             $this->client = new Client([
