@@ -2339,64 +2339,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       L.tileLayer(url, {
         attribution: ''
-      }).addTo(this.map); // let drawnItems = L.featureGroup().addTo(this.map);
-      // try {
-      //     this.map.addControl(new L.Control.Draw({
-      //         // position: 'topright',
-      //         draw: {
-      //             polygon: {
-      //                 allowIntersection: false, // Restricts shapes to simple polygons
-      //                 drawError: {
-      //                     color: '#e1e100', // Color the shape will turn when intersects
-      //                     message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-      //                 },
-      //                 shapeOptions: {
-      //                     color: '#97009c'
-      //                 }
-      //             },
-      //             polyline: {
-      //                 shapeOptions: {
-      //                     color: '#f357a1',
-      //                     weight: 10
-      //                 }
-      //             },
-      //             //disable toolbar item by setting it to false
-      //             // polyline: true,
-      //             circle: true, // Turns off this drawing tool
-      //             // polygon: true,
-      //             marker: true,
-      //             rectangle: true,
-      //         },
-      //         edit: {
-      //             featureGroup: drawnItems,
-      //             // poly: {
-      //             //     allowIntersection: false
-      //             // }
-      //         },
-      //     }))
-      //     this.map.on(L.Draw.Event.CREATED, (e) => {
-      //         let layer = e.layer;
-      //         drawnItems.addLayer(layer)
-      //     })
-      // }catch (e){console.log(e.message)}
-
+      }).addTo(this.map);
       this.map.invalidateSize(); //L.control.bigImage({position: 'topright'}).addTo(mymap);
     },
     createInfo: function createInfo(data) {
       try {
         var ar = '';
-        var mnc = this.operators.find(function (e) {
-          return e.id === data.mnc;
-        });
-        ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name">' + data.sector_name + '</span></h3>';
-        ar += '<b>LAC и CID:</b> <span class="text-red-600" id="laccid">' + data.lac + ' ' + data.ci + '</span><br>'; // ar += '<b>CID:</b> ' + data.ci + '<br>'
 
-        ar += '<b>Диапазон:</b> <span id="diapason">' + data.diapason + '</span><br>';
-        ar += '<b>Азимут:</b> <span id="azimuth">' + data.azimuth + '</span><br>';
-        ar += '<b>Оператор:</b> <span id="title">' + mnc.title + ' (' + mnc.id + ')' + '</span><br>';
-        ar += '<b>Адрес:</b> <span id="address" @click="copyText(\'address\')">' + data.address + ' ' + this.getDirection(data.azimuth) + '</span><br>';
-        ar += '<b>Дата и время:</b> ' + new Date().toLocaleTimeString() + '<br>';
-        ar += '<b>LAC и CID имп:</b><span id="lacCid" class="border-b border-green-400">' + this.lacCid + '</span>';
+        if (this.locInfo.data.mp != null) {
+          var mnc = this.operators.find(function (e) {
+            return e.id === data.mnc;
+          });
+          ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name">' + data.sector_name + '</span></h3>';
+          ar += '<b>LAC и CID:</b> <span class="text-red-600" id="laccid">' + data.lac + ' ' + data.ci + '</span><br>';
+          ar += '<b>Диапазон:</b> <span id="diapason">' + data.diapason + '</span><br>';
+          ar += '<b>Азимут:</b> <span id="azimuth">' + data.azimuth + '</span><br>';
+          ar += '<b>Оператор:</b> <span id="title">' + mnc.title + ' (' + mnc.id + ')' + '</span><br>';
+          ar += '<b>Адрес:</b> <span id="address" @click="copyText(\'address\')">' + data.address + ' ' + this.getDirection(data.azimuth) + '</span><br>';
+          ar += '<b>Дата и время:</b> ' + new Date().toLocaleTimeString() + '<br>';
+        } else {
+          ar += '<h3 class="text-lg text-red-600"><b>БС:</b> <span id="sector_name"> Сеть 4G</span></h3>';
+          ar += '<b>Прим. адрес: </b><span id="_address">' + this.locInfo.data._address + '</span><br>';
+          ar += '<b>LAC и CID имп: </b><span id="lacCid" class="border-b border-green-400">' + this.lacCid + '</span><br>';
+          ar += '<b>Дата и время: </b> ' + new Date().toDateString() + ' ' + new Date().toLocaleTimeString() + '<br>';
+        }
+
         this.bsInfo = ar;
         return this.bsInfo;
       } catch (e) {
@@ -2407,47 +2374,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     createBs: function createBs(inf) {
       this.clearMap();
-      var data = inf.mp;
-      var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
-      var LatLon = [data.lat, data.lon];
-      this.lacCid = inf.lac + ' ' + inf.cid;
-      this.currentLotLan = LatLon;
 
-      if (inf.mp == null) {
-        this.bsInfo += '<b>Прим. адрес:</b><span id="_address">' + inf._address + '</span><br>';
-      }
+      if (this.locInfo.data.mp != null) {
+        var data = inf.mp;
+        var uid = data.lac + '_' + data.ci + '_' + data.azimuth;
+        var LatLon = [data.lat, data.lon];
+        this.lacCid = inf.lac + ' ' + inf.cid;
+        this.currentLotLan = LatLon;
 
-      try {
-        var point = null;
+        try {
+          var point = null;
 
-        if (inf.lat && inf.lng) {
-          point = L.circle([inf.lat, inf.lng], {
-            radius: 20
+          if (inf.lat && inf.lng) {
+            point = L.circle([inf.lat, inf.lng], {
+              radius: 20
+            }).setStyle({
+              fillColor: '#ff0000',
+              opacity: 1
+            }).addTo(this.map);
+            this.layers.push(point);
+          }
+
+          var bs = L.circle(LatLon, {
+            radius: 15
           }).setStyle({
-            fillColor: '#ff0000',
+            fillColor: '#0073ff',
             opacity: 1
-          }).addTo(this.map);
-          this.layers.push(point);
+          }).bindPopup(this.createPopup(data));
+          var sector = this.createSector(LatLon, data);
+          var BsSector = L.layerGroup([bs, sector], {
+            uid: uid
+          });
+          this.layers.push(BsSector);
+          BsSector.addTo(this.map);
+          this.map.fitBounds(bs.getBounds());
+        } catch (e) {
+          console.log("create BS error: " + e.message);
         }
 
-        var bs = L.circle(LatLon, {
-          radius: 15
-        }).setStyle({
-          fillColor: '#0073ff',
-          opacity: 1
-        }).bindPopup(this.createPopup(data));
-        var sector = this.createSector(LatLon, data);
-        var BsSector = L.layerGroup([bs, sector], {
-          uid: uid
-        });
-        this.layers.push(BsSector);
-        BsSector.addTo(this.map);
-        this.map.fitBounds(bs.getBounds());
-      } catch (e) {
-        console.log("create BS error: " + e.message);
+        this.map.setZoom(15);
+      } else {
+        this.createInfo(this.locInfo.data);
       }
-
-      this.map.setZoom(15);
     },
     strg: function strg(er) {
       return er.replace('\\', '\\').toString();
