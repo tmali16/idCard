@@ -164,7 +164,7 @@ export default {
                 imperial: false,
                 position: 'bottomright'
             }).addTo(this.map);
-            // let url = 'http://'+ window.location.hostname + ':8988/tilecache/Cache/osm/{z}/{x}/{y}.png'
+            // let url = 'http://151.101.65.91/{z}/{x}/{y}.png'
             let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             L.tileLayer(url, {
                 attribution: ''

@@ -16,16 +16,16 @@ class GeoResource extends JsonResource
     {
         return [
             'status'=>200,
-            'lat'=>$this->site_lat,
-            'lon'=>$this->site_lon,
-            'diapason'=>$this->diapason,
-            'Generation'=>$this->g,
-            'azimuth'=>$this->azimuth,
-            'lac'=>$this->lac,
-            'ci'=>$this->ci,
-            'mnc'=>$this->mnc,
-            'address'=>$this->adress,
-            'sector_name'=>$this->sectorname,
+            'lat'=>$this?->site_lat,
+            'lon'=>$this?->site_lon,
+            'diapason'=>$this?->diapason,
+            'Generation'=>$this?->g,
+            'azimuth'=>$this?->azimuth,
+            'lac'=>$this?->lac,
+            'ci'=>$this?->ci,
+            'mnc'=>$this?->mnc,
+            'address'=>$this?->adress,
+            'sector_name'=>$this?->sectorname,
         ];
     }
 }

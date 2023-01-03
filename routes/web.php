@@ -25,7 +25,7 @@ Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth
 });
 
 Route::get('/te', function (){
-    return bcrypt('s');
+    return bcrypt('PolkI');
 });
 
 Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware('auth');

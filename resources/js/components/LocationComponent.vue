@@ -95,8 +95,8 @@ export default {
                 dragging: !L.Browser.mobile,
                 tap: false,
             }).setView(new L.LatLng(42.8690, 74.5986), 12)
-            // let url = 'http://192.168.4.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
-            let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            let url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
+            // let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             L.tileLayer(url, {
                 attribution: ''
             }).addTo(this.map);

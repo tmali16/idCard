@@ -2334,9 +2334,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         zoomControl: true,
         dragging: !L.Browser.mobile,
         tap: false
-      }).setView(new L.LatLng(42.8690, 74.5986), 12); // let url = 'http://192.168.4.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
+      }).setView(new L.LatLng(42.8690, 74.5986), 12);
+      var url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'; // let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-      var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       L.tileLayer(url, {
         attribution: ''
       }).addTo(this.map);
@@ -2701,7 +2701,7 @@ __webpack_require__.r(__webpack_exports__);
       L.control.scale({
         imperial: false,
         position: 'bottomright'
-      }).addTo(this.map); // let url = 'http://'+ window.location.hostname + ':8988/tilecache/Cache/osm/{z}/{x}/{y}.png'
+      }).addTo(this.map); // let url = 'http://151.101.65.91/{z}/{x}/{y}.png'
 
       var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       L.tileLayer(url, {
