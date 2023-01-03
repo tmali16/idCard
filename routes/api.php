@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/login', [\App\Http\Controllers\Api\ApiLoginController::class, 'login']);
+Route::post('/login', [\App\Http\Controllers\Api\ApiLoginController::class, 'logins']);
 
 Route::prefix('/profile')->middleware('auth:sanctum')->group(function () {
     Route::get("/auth",   [\App\Http\Controllers\Api\ApiLoginController::class, 'isAuth']);

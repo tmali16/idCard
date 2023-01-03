@@ -7,27 +7,34 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Http\Resources\UserResource;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ApiLoginController extends Controller
 {
+    use AuthenticatesUsers;
     private string $TAG = __CLASS__;
     public function __construct() {
 //        $this->middleware('auth:sanctum');
     }
 
-    public function login(Request $request)
+    public function logins(Request $request)
     {
+
         $attr = $request->validate([
             'username'=>'required|string',
             'password'=>'required|string',
         ]);
+
         $device = $request->device;
-         print_r($device);
+
         if (!Auth::attempt($attr)) {
-            return $this->error("Credentials not match", 401);
+            return response()->json([
+                'message'=>'Неправельный логин или пароль',
+                'code'=>'401',
+            ])->setStatusCode(401);
         }
 
         return response()->json(
