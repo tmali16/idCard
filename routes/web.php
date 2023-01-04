@@ -31,6 +31,11 @@ Route::get('/te', function (){
 Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware('auth');
 Route::get('/ls', [\App\Http\Controllers\PulseController::class, 'sendPulse'])->middleware('auth');
 
+Route::prefix('/user')->middleware(['auth', 'permission:user.*'])->group(function(){
+    Route::get('/', [\App\Http\Controllers\Auth\UserController::class, 'index'])->middleware('permission:user.view');
+    Route::get('/crud/{id}', [\App\Http\Controllers\Auth\UserController::class, 'crud'])->middleware('permission:user.view');
+
+});
 
 Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
     Route::post('geo/search', 'getByMncLacCid');

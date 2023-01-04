@@ -17,7 +17,6 @@ class LocationResource extends JsonResource
      */
     public function toArray($request)
     {
-        info($this['lac']);
         return array_merge_recursive(parent::toArray($request), [
             'mp'=>
                 !is_null($this['lac']) &&
@@ -28,11 +27,4 @@ class LocationResource extends JsonResource
     function ex(string $k, $ar){
         return array_key_exists($k, (array)$ar);
     }
-
-//    public function with($request)
-//    {
-//        return [
-//            'mp'=> $this->ex('lac', $this) && $this->ex('cellid', $this) ? new GeoResource(GeoService::get($this['mnc'], $this['lac'], $this['cellid'])) : null
-//        ];
-//    }
 }

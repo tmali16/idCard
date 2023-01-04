@@ -36,7 +36,6 @@ class ApiLoginController extends Controller
                 'code'=>'401',
             ])->setStatusCode(401);
         }
-
         return response()->json(
             [
                 'token'=>auth()->user()->createToken($device ?? 'API Token')->plainTextToken

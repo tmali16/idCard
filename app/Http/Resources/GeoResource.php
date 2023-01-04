@@ -26,6 +26,7 @@ class GeoResource extends JsonResource
             'mnc'=>$this?->mnc,
             'address'=>$this?->adress,
             'sector_name'=>$this?->sectorname,
+            'sectorname'=>$this?->sectorname,
         ];
     }
 }
