@@ -40,7 +40,7 @@ class ApiRequestController extends Controller
             'cid'=>'required|numeric',
         ]);
         $lac = $request->get('lac');
-        $ci = $request->get('ci');
+        $ci = $request->get('cid');
         $geo = GeoService::getBs($lac, $ci);
         return new GeoResource($geo);
     }
