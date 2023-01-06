@@ -31,6 +31,14 @@ class GeoService
             ])->first();
     }
 
+    public static function getBs($lac, $ci){
+        return  Geo::query()
+            ->where([
+                ['lac', '=', $lac],
+                ['ci', '=', $ci],
+            ])->first();
+    }
+
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));
         $bs_name = $request->get('bs_name');

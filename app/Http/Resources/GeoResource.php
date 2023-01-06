@@ -15,18 +15,18 @@ class GeoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'status'=>200,
-            'lat'=>$this?->site_lat,
-            'lon'=>$this?->site_lon,
-            'diapason'=>$this?->diapason,
-            'Generation'=>$this?->g,
-            'azimuth'=>$this?->azimuth,
-            'lac'=>$this?->lac,
-            'ci'=>$this?->ci,
-            'mnc'=>$this?->mnc,
-            'address'=>$this?->adress,
-            'sector_name'=>$this?->sectorname,
-            'sectorname'=>$this?->sectorname,
+            'status'=>$this->resource ? 200 : 404,
+            'lat'=>$this->resource?->ssite_lat,
+            'lon'=>$this->resource?->site_lon,
+            'diapason'=>$this->resource?->diapason,
+            'Generation'=>$this->resource?->g,
+            'azimuth'=>$this->resource?->azimuth,
+            'lac'=>$this->resource?->lac,
+            'ci'=>$this->resource?->ci,
+            'mnc'=>$this->resource?->mnc,
+            'address'=>$this->resource?->adress,
+            'sector_name'=>$this->resource?->sectorname,
+            'sectorname'=>$this->resource?->sectorname,
         ];
     }
 }

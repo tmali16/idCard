@@ -23,6 +23,6 @@ Route::prefix('/profile')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('/request')->middleware(['auth:sanctum', 'permission:request.*'])->group(function(){
     Route::get('/bs', [\App\Http\Controllers\Api\ApiRequestController::class, 'getMpByTerminal']);//->middleware('permission:request.terminal');
-    Route::get('/terminal', [])->middleware('permission:request.terminal');
+    Route::get('/bs/info', [\App\Http\Controllers\Api\ApiRequestController::class, 'getBsByLaCi']);//->middleware('permission:request.*');
 });
 
