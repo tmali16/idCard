@@ -16,7 +16,7 @@ class GeoResource extends JsonResource
     {
         return [
             'status'=>$this->resource ? 200 : 404,
-            'lat'=>$this->resource?->ssite_lat,
+            'lat'=>$this->resource?->site_lat,
             'lon'=>$this->resource?->site_lon,
             'diapason'=>$this->resource?->diapason,
             'Generation'=>$this->resource?->g,
