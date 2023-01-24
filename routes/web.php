@@ -21,14 +21,14 @@ Auth::routes(['login']);
 //});
 
 Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth'])->group(function (){
-    Route::get("/", 'index');
+    Route::get("/", 'index')->name('index');
 });
 
 Route::get('/te', function (){
     return bcrypt('PolkI');
 });
 
-Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware(['auth', 'permission:request.terminal']);
+Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware(['auth', 'permission:request.terminal'])->name('terminal');
 Route::get('/ls', [\App\Http\Controllers\PulseController::class, 'sendPulse'])->middleware(['auth', 'permission:request.terminal']);
 
 Route::prefix('/user')->name('user.')->middleware(['auth', 'permission:user.*'])->group(function(){

@@ -16,25 +16,28 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-blue-400">
 {{--            @include('layouts.navigation')--}}
-{{--            <header class="bg-white shadow-sm">--}}
-{{--                <div class="container mx-auto pt-2 px-4 sm:px-6 lg:px-8">--}}
-{{--                    <ul class="nav">--}}
-{{--                        <li class="nav-item ">--}}
-{{--                            <a class="nav-link  {{request()->routeIs('index') ? 'border-b-2 border-red-400' : ''}}" aria-current="page" href="{{route('index')}}">--}}
-{{--                                Главная--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nav-item {{request()->routeIs('control') ? 'border-b-2 border-red-400' : ''}}">--}}
-{{--                            <a class="nav-link" href="{{route('control')}}">Контроль</a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nav-item {{request()->routeIs('guard') ? 'border-b-2 border-red-400' : ''}}">--}}
-{{--                            <a class="nav-link" href="#">--}}
-{{--                                Сторож--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                </div>--}}
-{{--            </header>--}}
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-2 sm:px-6 lg:px-8">
+                    <ul class="flex flex-row mt-0 mr-6 w-full gap-x-8 text-sm font-medium">
+                        <li class="">
+                            <a class="text-gray-900 dark:text-white hover:underline {{request()->routeIs('index') ? 'border-b-2 border-red-400' : ''}}" aria-current="page" href="{{route('index')}}">
+                                Главная
+                            </a>
+                        </li>
+                        @permission('request.terminal')
+                        <li class=" {{request()->routeIs('terminal') ? 'border-b-2 border-red-400' : ''}}">
+                            <a class="text-gray-900 dark:text-white hover:underline" href="{{route('terminal')}}">Контроль</a>
+                        </li>
+                        @endpermission
+                        <li class="">
+                        <a class="hover:bg-gray-200 block px-4 text-red-500 text-sm text-gray-700" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            {{ __('Выход') }}
+                            <form action="{{route('logout')}}" style="display: none;" id="logout-form" method="post">@csrf</form>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
             <!-- Page Content -->
             <main class="h-screen" id="app">
                 @yield("content")
