@@ -17,6 +17,7 @@ class Input extends Component
     private $lable;
     private $value;
     private $attribute;
+    private $readonly;
     private $help;
 
 
@@ -25,7 +26,7 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct($domain, $type = "text", $required = false, $class = "", $onside = false, $div_class = "", $lableClass = "", $lable = true, $value = null, $attribute = [], $help="")
+    public function __construct($domain, $type = "text", $required = false, $class = "", $onside = false, $div_class = "", $lableClass = "", $lable = true, $value = null, $attribute = [], $readonly=false, $help="")
     {
         $this->domain = $domain;
         $this->name = bind($domain);
@@ -38,6 +39,7 @@ class Input extends Component
         $this->lable = $lable;
         $this->value = $value;
         $this->attribute = $attribute;
+        $this->readonly = $readonly;
     }
 
     /**
@@ -59,6 +61,7 @@ class Input extends Component
             'div_class' => $this->div_class,
             'value' => $this->value,
             'attributes' => $this->attribute,
+            'readonly' => $this->readonly,
         ]);
     }
 }

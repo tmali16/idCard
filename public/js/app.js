@@ -2271,7 +2271,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "LocationComponent",
   data: function data() {
@@ -2300,7 +2299,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         object_type: 'Phone',
         object: ''
       },
-      tabsMo: [0],
+      tabsMo: 1,
       overlay: false,
       lacCid: ''
     };
@@ -2330,13 +2329,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     init: function init() {
-      this.map = new L.Map('mapContainer', {
+      this.map = new L.Map('mapContainers', {
         zoomControl: true,
         dragging: !L.Browser.mobile,
         tap: false
-      }).setView(new L.LatLng(42.8690, 74.5986), 12);
-      var url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'; // let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      }).setView(new L.LatLng(42.8690, 74.5986), 12); //let url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
 
+      var url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       L.tileLayer(url, {
         attribution: ''
       }).addTo(this.map);
@@ -31253,7 +31252,13 @@ var render = function () {
         [
           _c("v-text-field", {
             staticClass: "m-0 p-0",
-            attrs: { counter: "", "hide-details": "", dense: "", solo: "" },
+            attrs: {
+              counter: "",
+              type: "number",
+              "hide-details": "",
+              dense: "",
+              solo: "",
+            },
             on: {
               change: function ($event) {
                 return _vm.objectInputFormating()
@@ -31338,117 +31343,47 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "v-card",
-        [
-          _c(
-            "v-tabs",
-            {
-              model: {
-                value: _vm.tabsMo,
-                callback: function ($$v) {
-                  _vm.tabsMo = $$v
-                },
-                expression: "tabsMo",
-              },
-            },
-            [
-              _c("v-tab", [_vm._v("Карта")]),
-              _vm._v(" "),
-              _c("v-tab", [_vm._v("Инфо")]),
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-tabs-items",
-            {
-              model: {
-                value: _vm.tabsMo,
-                callback: function ($$v) {
-                  _vm.tabsMo = $$v
-                },
-                expression: "tabsMo",
-              },
-            },
-            [
-              _c("v-tab-item", [
-                _c("div", { staticClass: "p-2 overflow-hidden" }, [
-                  _vm.layers.length > 0
-                    ? _c(
-                        "div",
-                        { staticClass: "flex p-2" },
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              staticClass: "bg-blue-500",
-                              attrs: { "x-small": "" },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.toggleLayer()
-                                },
-                              },
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.layerHideShow
-                                    ? "Скрыть БС"
-                                    : "Показать БС"
-                                )
-                              ),
-                            ]
-                          ),
-                        ],
-                        1
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", {
-                    staticClass: "h-full relative",
-                    staticStyle: {
-                      "max-height": "640px",
-                      "min-height": "400px",
-                    },
-                    attrs: { id: "mapContainer" },
-                  }),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("v-tab-item", [
-                _c(
-                  "div",
-                  { staticClass: "p-2 m-2" },
-                  [
-                    _c(
-                      "v-btn",
-                      {
-                        staticClass: "bg-blue-800",
-                        attrs: { "x-small": "", tile: "" },
-                        on: {
-                          click: function ($event) {
-                            return _vm.copyText("address")
-                          },
+      _c("v-card", [
+        _c("p", {
+          attrs: { id: "infoBlock" },
+          domProps: { innerHTML: _vm._s(_vm.bsInfo) },
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "overflow-hidden" }, [
+          _vm.layers.length > 0
+            ? _c(
+                "div",
+                { staticClass: "flex p-2" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "bg-blue-500",
+                      attrs: { "x-small": "" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.toggleLayer()
                         },
                       },
-                      [_vm._v("C")]
-                    ),
-                    _vm._v(" "),
-                    _c("p", {
-                      attrs: { id: "infoBlock" },
-                      domProps: { innerHTML: _vm._s(_vm.bsInfo) },
-                    }),
-                  ],
-                  1
-                ),
-              ]),
-            ],
-            1
-          ),
-        ],
-        1
-      ),
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(_vm.layerHideShow ? "Скрыть БС" : "Показать БС")
+                      ),
+                    ]
+                  ),
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "h-full relative",
+            staticStyle: { "max-height": "640px", "min-height": "400px" },
+            attrs: { id: "mapContainers" },
+          }),
+        ]),
+      ]),
       _vm._v(" "),
       _c(
         "v-overlay",
@@ -31467,7 +31402,7 @@ var render = function () {
                   staticClass: "subtitle-1 text-center",
                   attrs: { cols: "12" },
                 },
-                [_vm._v("\n                Поиск данных\n            ")]
+                [_vm._v("\n                    Поиск данных\n                ")]
               ),
               _vm._v(" "),
               _c(

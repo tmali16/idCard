@@ -24,6 +24,9 @@ if ($value != null) {
             id="{{$domain}}"
             placeholder="{{__($domain)}}"
             type="{{$type ?? 'text'}}"
+            @if($readonly)
+            readonly="readonly"
+            @endif
             @if ($val)
             value="{{$val}}"
             @endif

@@ -1,7 +1,7 @@
 <template>
     <div class=" p-2">
         <div class="flex pb-2 gap-x-4" >
-            <v-text-field counter @change="objectInputFormating()"
+            <v-text-field counter @change="objectInputFormating()" type="number"
                           hide-details v-model="request.object" dense class="m-0 p-0" solo></v-text-field>
             <v-btn  :disabled="request.object_type !== 'Phone'" color="green" class="text-white" @click="sendPulse()">
                 <v-icon>mdi-pulse</v-icon>
@@ -14,26 +14,25 @@
             <label v-if="locInfo.data.text"><strong>Примечание: </strong><span class="text-info-500 overflow-hidden overflow-y-auto" style="max-width: 300px;" v-html="strg(locInfo.data.text)"></span></label>
         </div>
         <v-card>
-            <v-tabs v-model="tabsMo">
-                <v-tab>Карта</v-tab>
-                <v-tab>Инфо</v-tab>
-            </v-tabs>
-            <v-tabs-items v-model="tabsMo">
-                <v-tab-item>
-                    <div class="p-2 overflow-hidden">
-                        <div class="flex p-2" v-if="layers.length > 0">
-                            <v-btn x-small class="bg-blue-500" @click="toggleLayer()">{{layerHideShow ? 'Скрыть БС' : 'Показать БС'}}</v-btn>
-                        </div>
-                        <div class="h-full relative" id="mapContainer" style="max-height: 640px; min-height: 400px; " ></div>
-                    </div>
-                </v-tab-item>
-                <v-tab-item>
-                    <div class="p-2 m-2">
-                        <v-btn x-small class="bg-blue-800" @click="copyText('address')" tile>C</v-btn>
+<!--            <v-expansion-panels v-model="tabsMo">-->
+<!--                <v-expansion-panel>-->
+<!--                    <v-expansion-panel-header>Инфо</v-expansion-panel-header>-->
+<!--                    <v-expansion-panel-content>-->
                         <p v-html="bsInfo" id="infoBlock" class=""></p>
-                    </div>
-                </v-tab-item>
-            </v-tabs-items>
+<!--                    </v-expansion-panel-content>-->
+<!--                </v-expansion-panel>-->
+<!--                <v-expansion-panel>-->
+<!--                    <v-expansion-panel-header>Карта</v-expansion-panel-header>-->
+<!--                    <v-expansion-panel-content class="m-0">-->
+                        <div class="overflow-hidden">
+                            <div class="flex p-2" v-if="layers.length > 0">
+                                <v-btn x-small class="bg-blue-500" @click="toggleLayer()">{{layerHideShow ? 'Скрыть БС' : 'Показать БС'}}</v-btn>
+                            </div>
+                            <div class="h-full relative" id="mapContainers" style="max-height: 640px; min-height: 400px; " ></div>
+                        </div>
+<!--                    </v-expansion-panel-content>-->
+<!--                </v-expansion-panel>-->
+<!--            </v-expansion-panels>-->
         </v-card>
         <v-overlay :value="overlay" z-index="999">
             <v-row class="fill-height" align-content="center" justify="center">
@@ -66,7 +65,7 @@ export default {
                 object_type:'Phone',
                 object:'',
             },
-            tabsMo: [0],
+            tabsMo: 1,
             overlay:false,
             lacCid: ''
         }
@@ -90,13 +89,13 @@ export default {
             })
         },
         init() {
-            this.map = new L.Map('mapContainer', {
+            this.map = new L.Map('mapContainers', {
                 zoomControl: true,
                 dragging: !L.Browser.mobile,
                 tap: false,
             }).setView(new L.LatLng(42.8690, 74.5986), 12)
-            let url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
-            // let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            //let url = 'http://192.168.8.1/tilecache/Cache/osm/{z}/{x}/{y}.png'
+            let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             L.tileLayer(url, {
                 attribution: ''
             }).addTo(this.map);

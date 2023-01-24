@@ -33,8 +33,8 @@ if ($selected != null){
         'border-red-600'=>$errors->login->first($name)
     ])>
     @if (isset($options) && !empty($options) && empty($uri))
+        <option value="" selected>--Выберите--</option>
         @if(!$multiple)
-            <option value="0">--Выберите--</option>
         @endif
         @foreach ($options as $o)
             @if (gettype($o) === "object")

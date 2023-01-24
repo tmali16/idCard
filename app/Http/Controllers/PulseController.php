@@ -17,7 +17,7 @@ class PulseController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        if(auth()->check() && auth()->user()->username !== 'admin'){
+        if(auth()->check() && !auth()->user()->hasPermission('request.terminal')){
             abort(404, '_NOT_FOUND');
         }else{
             $this->url = env('TERMINAL_API_URL');

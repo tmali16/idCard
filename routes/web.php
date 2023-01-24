@@ -28,13 +28,14 @@ Route::get('/te', function (){
     return bcrypt('PolkI');
 });
 
-Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware('auth');
-Route::get('/ls', [\App\Http\Controllers\PulseController::class, 'sendPulse'])->middleware('auth');
+Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware(['auth', 'permission:request.terminal']);
+Route::get('/ls', [\App\Http\Controllers\PulseController::class, 'sendPulse'])->middleware(['auth', 'permission:request.terminal']);
 
-Route::prefix('/user')->middleware(['auth', 'permission:user.*'])->group(function(){
-    Route::get('/', [\App\Http\Controllers\Auth\UserController::class, 'index'])->middleware('permission:user.view');
-    Route::get('/crud/{id}', [\App\Http\Controllers\Auth\UserController::class, 'crud'])->middleware('permission:user.view');
-
+Route::prefix('/user')->name('user.')->middleware(['auth', 'permission:user.*'])->group(function(){
+    Route::get('/', [\App\Http\Controllers\Auth\UserController::class, 'index'])->name('index')->middleware('permission:user.view');
+    Route::get('/rud/{id}', [\App\Http\Controllers\Auth\UserController::class, 'rud'])->middleware('permission:user.view');
+    Route::get('/create', [\App\Http\Controllers\Auth\UserController::class, 'create'])->middleware('permission:user.*')->name('create');
+    Route::get('/store', [\App\Http\Controllers\Auth\UserController::class, 'save'])->middleware('permission:user.*');
 });
 
 Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
