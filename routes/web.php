@@ -22,10 +22,11 @@ Auth::routes(['login']);
 
 Route::controller(\App\Http\Controllers\MapController::class)->middleware(['auth'])->group(function (){
     Route::get("/", 'index')->name('index');
+    Route::get("/m", 'pro')->name('pro');
 });
 
 Route::get('/te', function (){
-    return bcrypt('PolkI');
+    return bcrypt('123');
 });
 
 Route::get('/l', [\App\Http\Controllers\PulseController::class, 'page'])->middleware(['auth', 'permission:request.terminal'])->name('terminal');
@@ -41,4 +42,6 @@ Route::prefix('/user')->name('user.')->middleware(['auth', 'permission:user.*'])
 Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
     Route::post('geo/search', 'getByMncLacCid');
     Route::get('geo/history', 'getLastRequest');
+    Route::post('geo/se', 'fullSearch');
 });
+Route::get('/api/fav/get', [\App\Http\Controllers\MapController::class, "favObjects"]);

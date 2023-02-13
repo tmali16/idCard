@@ -77,6 +77,20 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
+        'bill' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_BILL_HOST', '127.0.0.1'),
+            'port' => env('DB_BILL_PORT', '5432'),
+            'database' => env('DB_BILL_DATABASE', 'forge'),
+            'username' => env('DB_BILL_UNAME', 'forge'),
+            'password' => env('DB_BILL_PASS', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

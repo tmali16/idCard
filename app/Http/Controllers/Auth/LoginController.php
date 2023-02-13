@@ -46,7 +46,9 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if ($user->hasPermission('request.terminal')){
+        if ($user->hasPermission('view.object')){
+            return response()->redirectTo('/m');
+        }else if($user->hasPermission('request.terminal')){
             return response()->redirectTo('/l');
         }else{
            return response()->redirectTo('/');

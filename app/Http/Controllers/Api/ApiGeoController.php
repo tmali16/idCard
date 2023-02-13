@@ -34,5 +34,8 @@ class ApiGeoController extends Controller
         return $this->historyService->getLastRequest($request);
     }
 
+    function fullSearch(Request $request){
+        return $this->geoService->fullSearch($request);
+    }
 
 }

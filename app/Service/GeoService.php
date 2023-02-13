@@ -39,6 +39,36 @@ class GeoService
             ])->first();
     }
 
+    public function fullSearch(Request $request){
+        $txt = $request->get('text');
+        if(is_numeric(str_replace(" ","",$txt))){
+            $mnc = $request->get('mnc');
+            preg_match('/(\d+)\s+(\d+)/', $txt, $o);
+            if (count($o) !== 3 || !$mnc) {
+                return response()->json([
+                    'status' => 500,
+                    'messages' => 'Данные введены не верно!'
+                ]);
+            }
+            $lac = $o[1];
+            $ci = $o[2];
+            $geoQuery = Geo::query()
+                ->where([
+                    ['mnc', '=', $mnc],
+                    ['lac', '=', $lac],
+                    ['ci', 'like', str_replace("*", "%", $ci) . "%"],
+                ]);
+            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
+        }else{
+//            if(is_string($txt)){
+            $geoQuery = Geo::query()->where([
+                    ['sectorname', "ilike", (str_replace("*", "%", $txt) . "%")]
+                ])->distinct(['sectorname', 'g']);
+//            }
+        }
+        return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'g'])->get());
+    }
+
     function getByMncLacCid(Request $request){
 //        dd($request->get(''));
         $bs_name = $request->get('bs_name');
