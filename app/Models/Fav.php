@@ -11,5 +11,5 @@ class Fav extends Model
     protected $connection = 'bill';
     protected $table = "favorites";
 //    public $timestamps = false;
-    protected $fillable = ['*'];
+    protected $guarded = ['id'];
 }

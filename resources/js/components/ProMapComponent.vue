@@ -40,7 +40,7 @@
                         </v-data-table>
                     </v-card>
                 </div>
-                <div class="col-span-9 sm:col-span-9 p-2 bg-gray-50" >
+                <div class="col-span-9 sm:col-span-9 bg-gray-50" >
                     <div class="flex justify-between p-2 gap-x-4" >
                         <div class=" flex p-2 gap-x-3">
                             <div class="">
@@ -186,6 +186,7 @@ export default {
                     console.log("Ошибка добавлении объекта: " + e.message)
                 })
             }else{
+                console.log("Чтото не так!!!")
                 this.favRule = true
             }
         },

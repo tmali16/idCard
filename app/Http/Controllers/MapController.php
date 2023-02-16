@@ -23,6 +23,7 @@ class MapController extends Controller
     public function createFav(Request $request)
     {
         $all = $request->all(['full_name', 'aliase', 'phone']);
+
         $r = Fav::create($all);
         return response()->json([
             'msg'=>'добавлено',

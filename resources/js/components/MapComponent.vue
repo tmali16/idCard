@@ -192,36 +192,8 @@ export default {
                 this.showToast("Не все поля заполнены", "error")
             }
         },
-        // createSector(LatLon, data){
-        //     let mnc = this.operators.find(e=>e.id===data.mnc)
-        //     this.sectorOutline.color = mnc.color
-        //     this.sectorOutline.fillColor = mnc.color
-        //     return new Radar(
-        //         {
-        //             radius:500, //Radius of radar sector,The unit is meter
-        //             angle:65, //Fan opening and closing angle 0-360
-        //             direction: parseInt(data.azimuth), // Fan orientation angle 0-360
-        //             location: LatLon.join(", ") // Longitude dimension of sector start position
-        //         },
-        //         {
-        //             online: this.sectorOutline,
-        //             animat: {
-        //                 color: '#238',
-        //                 weight: 0,
-        //                 opacity: 0,
-        //                 fillColor: "#ff0",
-        //                 fillOpacity: 0.05,
-        //                 pmIgnore: false
-        //             },
-        //             text: 'BS Station',
-        //             step: 3  //The refresh distance of each frame of radar scanning animation. The unit is meter.
-        //         }
-        //     )
-        // },
         createSector(LatLon, data){
             let mnc = this.operators.find(e=>e.id===data.mnc)
-            this.sectorOutline.color = mnc.color
-            this.sectorOutline.fillColor = mnc.color
             return window.L.semiCircle(LatLon, {
                 radius: 500,
                 color: mnc.color
@@ -234,7 +206,7 @@ export default {
             ar += '<b>LAC:</b> ' + data.lac + '<br>'
             ar += '<b>CID:</b> ' + data.ci + '<br>'
             ar += '<b>Диапазон:</b> ' + data.diapason + '<br>'
-            ar += '<b>Поколение:</b> ' + data.Generation + '<br>'
+            ar += '<b>Поколение:</b> ' + data.Generation + 'G<br>'
             ar += '<b>Азимут:</b> ' + data.azimuth + '<br>'
             ar += '<b>Оператор:</b> ' + mnc.title + ' ('+mnc.id+')'+ '<br>'
             ar += '<b>Адрес:</b> ' + data.address + '<br>';

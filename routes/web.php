@@ -39,9 +39,10 @@ Route::prefix('/user')->name('user.')->middleware(['auth', 'permission:user.*'])
     Route::get('/store', [\App\Http\Controllers\Auth\UserController::class, 'save'])->middleware('permission:user.*');
 });
 
-Route::prefix('api')->controller(\App\Http\Controllers\Api\ApiGeoController::class)->group(function (){
-    Route::post('geo/search', 'getByMncLacCid');
-    Route::get('geo/history', 'getLastRequest');
-    Route::post('geo/se', 'fullSearch');
+Route::prefix('api')->group(function (){
+    Route::post('geo/search', [\App\Http\Controllers\Api\ApiGeoController::class, 'getByMncLacCid']);
+    Route::get('geo/history', [\App\Http\Controllers\Api\ApiGeoController::class,'getLastRequest']);
+    Route::post('geo/se', [\App\Http\Controllers\Api\ApiGeoController::class,'fullSearch']);
+    Route::get('fav/get', [\App\Http\Controllers\MapController::class, "favObjects"]);
+    Route::post('fav/add', [\App\Http\Controllers\MapController::class, "createFav"]);
 });
-Route::get('/api/fav/get', [\App\Http\Controllers\MapController::class, "favObjects"]);
