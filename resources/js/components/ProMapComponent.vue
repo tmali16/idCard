@@ -311,39 +311,7 @@ export default {
                 })
             }
             tiles.addTo(this.map);
-            // let drawnItems = L.featureGroup().addTo(this.map);
-            try {
-                // this.map.addControl(new L.Control.Draw({
-                //     draw: {
-                //         polygon: {
-                //             allowIntersection: false, // Restricts shapes to simple polygons
-                //             drawError: {
-                //                 color: '#e1e100', // Color the shape will turn when intersects
-                //                 message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-                //             },
-                //             shapeOptions: {
-                //                 color: '#97009c'
-                //             }
-                //         },
-                //         polyline: {
-                //             shapeOptions: {
-                //                 color: '#f357a1',
-                //                 weight: 10
-                //             }
-                //         },
-                //         circle: true,
-                //         marker: true,
-                //         rectangle: true,
-                //     },
-                //     edit: {
-                //         featureGroup: drawnItems,
-                //     },
-                // }))
-                // this.map.on(L.Draw.Event.CREATED, (e) => {
-                //     let layer = e.layer;
-                //     drawnItems.addLayer(layer)
-                // })
-            }catch (e){console.log(e.message)}
+            this.initTools();
             this.map.invalidateSize();
         },
         layerChange(){
@@ -365,6 +333,49 @@ export default {
             let a= this.permissions.find(x=>x === item);
             return a !== undefined;
         },
+
+        initTools(){
+            let drawnItems = L.featureGroup().addTo(this.map);
+            try {
+                this.map.addControl(new L.Control.Draw({
+                    // position: 'topright',
+                    draw: {
+                        polygon: {
+                            allowIntersection: false, // Restricts shapes to simple polygons
+                            drawError: {
+                                color: '#e1e100', // Color the shape will turn when intersects
+                                message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                            },
+                            shapeOptions: {
+                                color: '#97009c'
+                            }
+                        },
+                        polyline: {
+                            shapeOptions: {
+                                color: '#f357a1',
+                                weight: 10
+                            }
+                        },
+                        //disable toolbar item by setting it to false
+                        // polyline: true,
+                        circle: true, // Turns off this drawing tool
+                        // polygon: true,
+                        marker: true,
+                        rectangle: true,
+                    },
+                    edit: {
+                        featureGroup: drawnItems,
+                        // poly: {
+                        //     allowIntersection: false
+                        // }
+                    },
+                }))
+                this.map.on(L.Draw.Event.CREATED, (e) => {
+                    let layer = e.layer;
+                    drawnItems.addLayer(layer)
+                })
+            }catch (e){console.log(e.message)}
+        }
     }
 }
 </script>

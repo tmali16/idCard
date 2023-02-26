@@ -7,6 +7,7 @@ import Vuetify from "./Plugins/Vuetify";
 import { Lang } from 'laravel-vue-lang/dist';
 window.L = require('leaflet/dist/leaflet');
 require('./Plugins/Semicircle')
+require('leaflet-draw/dist/leaflet.draw')
 
 Vue.use(Lang, {
     locale: 'ru',
