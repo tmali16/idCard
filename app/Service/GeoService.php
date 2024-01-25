@@ -27,15 +27,28 @@ class GeoService
             ->where([
                 ['mnc', '=', $mnc],
                 ['lac', '=', $lac],
-                ['ci', '=', $ci],
+                ['cid', '=', $ci],
             ])->first();
     }
 
-    public static function getBs($lac, $ci){
-        return  Geo::query()
+    public static function getBySectorName(string $sector){
+        return  Geo::query()->whereRaw('lower(sector_name) = lower(?)', [$sector])->distinct(['lac', 'cid'])->get();
+    }
+
+    public static function getByLacCid($lac, $ci){
+        return Geo::query()
             ->where([
                 ['lac', '=', $lac],
-                ['ci', '=', $ci],
+                ['cid', '=', $ci],
+            ])->distinct(['lac', 'cid'])->get();
+    }
+
+    public static function getBs($mnc, $lac, $ci){
+        return  Geo::query()
+            ->where([
+                ['mnc', '=', $mnc],
+                ['lac', '=', $lac],
+                ['cid', '=', $ci],
             ])->first();
     }
 
@@ -56,14 +69,14 @@ class GeoService
                 ->where([
                     ['mnc', '=', $mnc],
                     ['lac', '=', $lac],
-                    ['ci', 'like', str_replace("*", "%", $ci) . "%"],
+                    ['cid', 'like', str_replace("*", "%", $ci) . "%"],
                 ]);
-            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
+//            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
         }else{
 //            if(is_string($txt)){
             $geoQuery = Geo::query()->where([
-                    ['sectorname', "ilike", (str_replace("*", "%", $txt) . "%")]
-                ])->distinct(['sectorname', 'g']);
+                    ['sector_name', "ilike", (str_replace("*", "%", $txt) . "%")]
+                ])->distinct(['sector_name', 'g']);
 //            }
         }
         return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'g'])->get());
@@ -76,8 +89,8 @@ class GeoService
             if(strlen($bs_name) > 3) {
                 $geoQuery = Geo::query()
                     ->where([
-                        ['sectorname', "ilike", mb_strtoupper($bs_name)]
-                    ])->distinct(['sectorname', 'diapason']);
+                        ['sector_name', "ilike", mb_strtoupper($bs_name)]
+                    ])->distinct(['sector_name', 'diapason']);
             }else{
                 return response()->json([
                     'status' => 500,
@@ -100,10 +113,10 @@ class GeoService
                 ->where([
                     ['mnc', '=', $mnc],
                     ['lac', '=', $lac],
-                    ['ci', 'like', str_replace("*", "%", $ci) . "%"],
+                    ['cid', 'like', str_replace("*", "%", $ci) . "%"],
                 ]);
-            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
+//            $this->historyService->create($mnc, $lac, $ci, $geoQuery?->first()?->id);
         }
-        return GeoResource::collection($geoQuery->distinct(['lac', 'ci', 'diapason'])->get());
+        return GeoResource::collection($geoQuery->distinct(['lac', 'cid', 'diapason'])->get());
     }
 }

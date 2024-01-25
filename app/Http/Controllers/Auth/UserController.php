@@ -25,6 +25,9 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        if(!in_array($request->getClientIp(), ['127.0.0.1','12.3.2.5'])){
+            return response()->redirectTo('/');
+        }
         $users = User::query()->with('roles')->orderBy('id')->get();
 
         return response()->view('auth.users',['users'=>$users]);

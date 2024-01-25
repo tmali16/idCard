@@ -22,11 +22,12 @@ class GeoResource extends JsonResource
             'Generation'=>$this->resource?->g,
             'azimuth'=>$this->resource?->azimuth,
             'lac'=>$this->resource?->lac,
-            'ci'=>$this->resource?->ci,
+            'ci'=>$this->resource?->cid,
             'mnc'=>$this->resource?->mnc,
-            'address'=>$this->resource?->adress,
-            'sector_name'=>$this->resource?->sectorname,
-            'sectorname'=>$this->resource?->sectorname,
+            'address'=>$this->resource?->address,
+            'sector_name'=>$this->resource?->sector_name,
+            'sectorname'=>$this->resource?->sector_name,
+            'bandwidth'=>is_null($this->resource?->bandwidth) || $this->resource?->bandwidth == 0 ? 65 : $this->resource?->bandwidth,
         ];
     }
 }

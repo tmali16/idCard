@@ -10,13 +10,18 @@
                     <v-radio v-for="(v, i) in operators" dense :key="i" :label="v.title +' ('+v.id+')'" :value="v.id"></v-radio>
                 </v-radio-group>
                 <div class="flex gap-x-4 items-center justify-start">
-                <div class="flex flex-col text-center">
-                    <v-text-field dense type="text" label="LAC и CELLID" hint="LAC и СID пишите через пробел" flat class="p-0 m-0" v-model="reqData.LacCid" />
-                    <b class="text-red-600 text-xs justify-center">ИЛИ</b>
-                    <v-text-field dense type="text" label="BS NAME" hint="Название секотора базы" flat class="p-0 m-0" v-model="reqData.bs_name" />
-                </div>
+                    <div class="flex flex-col text-center">
+                        <v-text-field dense type="text" label="LAC и CELLID" hint="LAC и СID пишите через пробел" flat class="p-0 m-0" v-model="reqData.LacCid" />
+                        <b class="text-red-600 text-xs justify-center">ИЛИ</b>
+                        <v-text-field dense type="text" label="BS NAME" hint="Название секотора базы" flat class="p-0 m-0" v-model="reqData.bs_name" />
+                    </div>
                 </div>
             </v-card-text>
+            <v-radio-group v-model="mapChange" @change="layerChange" row class="m-0" hide-details >
+                <v-radio label="OSM" :value="1"></v-radio>
+                <v-radio label="2GIS" :value="2"></v-radio>
+                <v-radio label="Google" :value="3"></v-radio>
+            </v-radio-group>
             <v-card-actions>
                 <v-btn elevation="0" @click="getBs()" class="w-32" color="success">Поиск</v-btn>
                 <v-btn elevation="0" @click="clearMap()" size="sm" class="max-w-full" >Отчистить</v-btn>
@@ -26,7 +31,6 @@
             <v-tabs v-model="tab">
                 <v-tab>Секторы</v-tab>
                 <v-tab>Инфо по Сек.</v-tab>
-                <v-tab>История</v-tab>
             </v-tabs>
             <v-tabs-items v-model="tab" >
                 <v-tab-item >
@@ -61,36 +65,10 @@
                 <v-tab-item >
                     <div class=" w-full my-2 border px-3" v-html="bsInfo"></div>
                 </v-tab-item>
-                <v-tab-item>
-                    <div class="flex gap-x-2 w-full justify-end text-white">
-                        <v-btn class=" py-1 px-2 my-1" color="teal" x-small @click="hideHistory = !hideHistory">
-                            <v-icon small v-if="hideHistory">mdi-eye-off</v-icon>
-                            <v-icon small v-else>mdi-eye</v-icon>
-                        </v-btn>
-                        <v-btn color="primary" @click="showAllSectors(requestHistory)" dense x-small class="py-1 px-2 my-1 mx-2">
-                        <v-icon small>mdi-map-marker-multiple-outline</v-icon>
-                    </v-btn>
-                    </div>
-                    <v-list class="overflow-auto" style="max-height: 300px;" v-show="hideHistory">
-                        <v-list-item-group color="primary">
-                            <v-list-item v-for="(item, i) in requestHistory" :key="i">
-                                <v-list-item-content @click="historyBsAdd(item.cell)">
-                                    <v-list-item-title v-text="item.lac + ' ' + item.ci"></v-list-item-title>
-                                    <v-list-item-subtitle v-text="item.cell !== null ? 'Найдено' : 'Не найдено'"></v-list-item-subtitle>
-                                </v-list-item-content>
-                                    <v-list-item-action @click="hideBs(item.cell)">
-                                        <v-icon color="grey lighten-1">
-                                            mdi-close
-                                        </v-icon>
-                                    </v-list-item-action>
-                            </v-list-item>
-                        </v-list-item-group>
-                    </v-list>
-                </v-tab-item>
             </v-tabs-items>
         </v-card>
 
-        <div class="w-full p-4 my-2 border overflow-hidden auto-height-map" id="maps" style=""></div>
+        <div class="w-full p-4 my-2 border overflow-hidden auto-height-map" id="maps"></div>
     </v-card>
     <v-snackbar v-model="toast.state" :color="toast.type" top>
         {{toast.message}}
@@ -100,17 +78,19 @@
             </v-btn>
         </template>
     </v-snackbar>
+    <v-overlay absolute :value="preload" z-index="9999">
+        <v-progress-circular
+            indeterminate
+            size="64"
+        ></v-progress-circular>
+    </v-overlay>
 </v-app>
 </template>
 <script>
-// require('leaflet.bigimage')
-import  Radar  from 'leaflet-radar';
-import html2canvas from 'html2canvas';
-
 export default {
-
     data() {
         return {
+            preload: false,
             tab:[],
             hideHistory: true,
             hideSector: true,
@@ -144,16 +124,18 @@ export default {
             },
             bsInfo: '',
             requestHistory: [],
+            mapChange:1,
         }
     },
     mounted(){
         setTimeout(()=>{
             this.init();
-        }, 1000)
+        }, 100)
         this.getHistory();
     },
     methods:{
         init(){
+            this.layers = [];
             this.map = L.map('maps', {
                 // zoomControl: false,
                 dragging: !L.Browser.mobile,
@@ -164,14 +146,27 @@ export default {
                 imperial: false,
                 position: 'bottomright'
             }).addTo(this.map);
-            // let url = 'http://151.101.65.91/{z}/{x}/{y}.png'
             let url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-            L.tileLayer(url, {
-                attribution: ''
-            }).addTo(this.map);
+            let tiles = '';
+            if(this.mapChange === 2){
+                tiles = L.tileLayer('http://tile2.maps.2gis.com/tiles?x={x}&y={y}&z={z}', {
+                    attribution: ''
+                })
+            }else if(this.mapChange === 3){
+                tiles = L.tileLayer('http://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                    attribution: '',
+                    subdomains:['mt0','mt1','mt2','mt3']
+                })
+            }else {
+                tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: ''
+                })
+            }
+            tiles.addTo(this.map);
         },
         getBs(){
             if ((this.reqData.LacCid.length >= 2 && this.reqData.mnc.length !== 0) || this.reqData.bs_name.length > 3) {
+                this.preload = true;
                 axios.post('/api/geo/search', this.reqData).then(o => {
                     if(o.data.status !== undefined && parseInt(o.data.status) !== 200){
                         this.showToast(o.data.messages, "error")
@@ -185,6 +180,7 @@ export default {
                         }
                     }
                     this.getHistory()
+                    this.preload = false;
                 }).catch(e => {
                     console.log(e.message)
                 })
@@ -197,7 +193,7 @@ export default {
             return window.L.semiCircle(LatLon, {
                 radius: 500,
                 color: mnc.color
-            }).setDirection(parseInt(data.azimuth), 65)
+            }).setDirection(parseInt(data.azimuth), data.bandwidth)
         },
         createInfo(data){
             let ar = '';
@@ -210,8 +206,7 @@ export default {
             ar += '<b>Азимут:</b> ' + data.azimuth + '<br>'
             ar += '<b>Оператор:</b> ' + mnc.title + ' ('+mnc.id+')'+ '<br>'
             ar += '<b>Адрес:</b> ' + data.address + '<br>';
-            ar += '<b>LAT:</b> ' + data.lat + '<br>';
-            ar += '<b>LON:</b> ' + data.lon + '<br>';
+            ar += '<b>Карта: </b> <a target="_blank" href="https://info.o.kg/yourLocation.html?lat='+data.lat+'&lon='+data.lon+'&az='+data.azimuth+'&cr=1-500&abw=64">Открыть</a><br>';
             this.bsInfo = ar;
             return ar
         },
@@ -226,6 +221,22 @@ export default {
                 }
             })
         },
+        layerChange(){
+            this.resetMap();
+        },
+        resetMap(){
+            if(this.map !== null) {
+                this.map.off();
+                this.map.remove();
+                //this.reset()
+            }
+            this.map = null
+            let container = document.getElementById('maps');
+            container.innerHTML  = "";
+            this.init()
+            if (this.bsData[0] !== undefined)
+                this.createBs(this.bsData[0])
+        },
         createPopup(data, bs){
             return new L.Popup({
                 autoPan: false,
@@ -239,6 +250,7 @@ export default {
         },
         createBs(data){
             let uid = data.lac+'_'+data.ci+'_'+data.azimuth
+            console.log(this.layers.length)
             for(let i =0;i<this.layers.length; i++){
                 if(this.layers[i].options.uid === uid){
                     this.createInfo(data)

@@ -33,7 +33,7 @@ if ($value != null) {
             {{$attributes}}
             @if ($required) required @endif
             @if($disabled) disabled @endif
-            class="{{$class}} @error($name) border-red-600 @enderror w-full focus:bg-white block py-1 outline-none px-2 sm:text-sm border-1 border-gray-400"
+            class="{{$class}} @error($name) border-red-600 @enderror w-full focus:bg-white block py-1 outline-none px-2 sm:text-sm border-solid border-gray-400"
         />
         @isset($help)
             <small>{{$help}}</small>

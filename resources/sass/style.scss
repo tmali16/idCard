@@ -47,7 +47,7 @@ html body {
         height: 300px;
     }
     @media (min-width: 600px){
-        height: 750px;
+        min-height: 750px;
     }
 }
 .leaflet-popup-content-wrapper {
